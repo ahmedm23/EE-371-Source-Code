@@ -1,7 +1,7 @@
 // A four stage (4 bit) synchronous up counter, with active low reset.
 	//a. Design the counter using a dataflow model.
 	//b. Use the D flip-flop model in the adjacent listing.
-module synchrocounter (clk, reset, next);
+module syncrocounter (clk, reset, next);
 	input clk, reset;
 	wire [3:0] curr;
 	output [3:0] next;

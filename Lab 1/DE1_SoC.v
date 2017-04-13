@@ -1,5 +1,5 @@
-//`include "rippleCounter.v"
-//`include "johnsonCounter.v"
+`include "rippleCounter.v"
+`include "johnsonCounter.v"
 
 module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR,
 SW); 
@@ -39,7 +39,7 @@ module counterTestBench;
 	
 	rippleCounter rCounter (clk, reset, rippleCount);
 	//syncroCounter synCounter (clk, reset, syncroCount);
-	//johnsonCounter jCounter (clk, reset, johnsonCount);
+	johnsonCounter jCounter (clk, reset, johnsonCount);
 	
 	Tester test(rippleCount, johnsonCount, clk, reset);
 	
@@ -56,8 +56,8 @@ module Tester(rippleCount, johnsonCount, clk, reset);
 	reg clk, reset;
 	
 	initial begin
-		$display("\t\t clk \t reset \t rippleCount \t johnsonCount \t Time ");
-		$monitor("\t\t %b\t %b\t %b \t %b", clk, reset, rippleCount, johnsonCount, $time);
+		$display("\t\t clk \t reset \t rippleCount \t johnsonCount");
+		$monitor("\t\t %b  \t %b    \t %b          \t %b", clk, reset, rippleCount, johnsonCount);
 	end
 	
 	parameter CLOCK = 100;
