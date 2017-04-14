@@ -1,7 +1,7 @@
-//`include "rippleCounter.v"
-//`include "johnsonCounter.v"
-//`include "syncrocounter.v"
-//`include "SchemEntryCounter.bdf"
+`include "rippleCounter.v"
+`include "johnsonCounter.v"
+`include "syncrocounter.v"
+`include "SchemEntryCounter.v"
 
 module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR,
 SW); 
@@ -37,14 +37,14 @@ endmodule
 
 module counterTestBench;
 	wire clk, reset;
-	wire[3:0] rippleCount, johnsonCount, schemCount;
+	wire[3:0] rippleCount, johnsonCount, syncroCount, schemCount;
 	
-	//rippleCounter rCounter (clk, reset, rippleCount);
+	rippleCounter rCounter (clk, reset, rippleCount);
 	syncrocounter synCounter (clk, reset, syncroCount);
 	johnsonCounter jCounter (clk, reset, johnsonCount);
-	//SchemEntryCounter schemCounter (reset, clk, schemCount);
+	SchemEntryCounter schemCounter (.reset(reset), .clk(clk), .out1(schemCount[0]), .out2(schemCount[1]), .out3(schemCount[2]), .out4(schemCount[3]));
 	
-	Tester test(rippleCount, johnsonCount, schemCount, clk, reset);
+	Tester test(rippleCount, johnsonCount, syncroCount, schemCount, clk, reset);
 	
 	
 	initial begin
@@ -53,14 +53,15 @@ module counterTestBench;
 	end
 endmodule
 	
-module Tester(rippleCount, johnsonCount, schemCount, clk, reset);
-	input [3:0] rippleCount, johnsonCount, schemCount;
+module Tester(rippleCount, johnsonCount, syncroCount, schemCount, clk, reset);
+	input [3:0] rippleCount, johnsonCount, syncroCount, schemCount;
 	output clk, reset;
 	reg clk, reset;
 	
 	initial begin
-		$display("\t\t clk \t reset \t rippleCount \t johnsonCount \t schemCount");
-		$monitor("\t\t %b  \t %b    \t %b          \t %b           \t %b", clk, reset, rippleCount, johnsonCount, schemCount);
+		$display("\t\t clk \t reset \t rippleCount \t johnsonCount \t syncroCount \t schemCount");
+		$monitor("\t\t %b  \t %b    \t %b          \t %b           \t %b          \t %b", 
+			     clk, reset, rippleCount, johnsonCount, syncroCount, schemCount);
 	end
 	
 	parameter CLOCK = 100;
