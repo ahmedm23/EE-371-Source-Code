@@ -1,6 +1,6 @@
-`include "rippleCounter.v"
-`include "johnsonCounter.v"
-`include "syncrocounter.v"
+//`include "rippleCounter.v"
+//`include "johnsonCounter.v"
+//`include "syncrocounter.v"
 //`include "SchemEntryCounter.bdf"
 
 module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR,
@@ -79,10 +79,3 @@ module Tester(rippleCount, johnsonCount, schemCount, clk, reset);
 	
 
 endmodule
-	
-	
-	
-	
-	
-	
-	
