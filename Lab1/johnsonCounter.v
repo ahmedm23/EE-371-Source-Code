@@ -2,6 +2,7 @@ module johnsonCounter(clk, reset, count);
    input clk, reset;
    output reg [3:0] count;
 
+   // Assign parameters for each state
    parameter state0 = 4'b0000;
    parameter state1 = 4'b1000;
    parameter state2 = 4'b1100;
@@ -12,10 +13,10 @@ module johnsonCounter(clk, reset, count);
    parameter state7 = 4'b0001;
 
    always @ (posedge clk)
-      if (~reset)
+      if (~reset) // Display 4'b0000 as soon as reset activates
          count <= state0;
       else
-         case (count)
+         case (count) // Proceed through the states above as listed
             state0: count = state1;
             state1: count = state2;
             state2: count = state3;
