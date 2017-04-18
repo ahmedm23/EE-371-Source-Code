@@ -1,7 +1,7 @@
-`include "rippleCounter.v"
-`include "johnsonCounter.v"
-`include "syncrocounter.v"
-`include "SchemEntryCounter.v"
+//`include "rippleCounter.v"
+//`include "johnsonCounter.v"
+//`include "syncrocounter.v"
+//`include "SchemEntryCounter.v"
 
 module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR,
 SW); 
@@ -11,29 +11,34 @@ SW);
 	output [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
 	output [9:0] LEDR;
 	
-	// Generate clk off of CLOCK_50, whichClock picks rate.
-	wire [31:0] clk;
-	parameter whichClock = 25;
-	clock_divider cdiv (CLOCK_50, clk);
+	// Clock divider
+	// tBase[0] == 50MHz
+	// tBase[1] == 25MHz
+	// tBase[2] == 12.5MHz
+	reg [25:0] tBase;
+	always@(posedge CLOCK_50) tBase <= tBase + 1'b1;
+	
+//	rippleCounter rCounter (.clk(tBase[23]), .reset(SW[0]), .count(LEDR[3:0]));
+	syncrocounter synCounter (.clk(tBase[23]), .reset(SW[0]), .next(LEDR[3:0]));
+//	johnsonCounter jCounter (.clk(tBase[23]), .reset(SW[0]), .count(LEDR[3:0]));
+//	SchemEntryCounter schemCounter (.clk(tBase[23]), .reset(SW[0]), .out1(LEDR[0]), .out2(LEDR[1]), .out3(LEDR[2]), .out4(LEDR[3]));
+	
 
 endmodule
 		
-	//	A four stage (4 bit) synchronous Johnson up counter, with active low reset
-		//a. Design the counter using a behavioural model.
-		
-	// A four stage (4 bit) synchronous up counter, with active low reset, using schematic entry.	
+
  
 
 //divided_clocks[0] = 25MHz, [1] = 12.5Mhz, ... [23] = 3Hz, [24] = 1.5Hz,[25] = 0.75Hz, ...
-module clock_divider (clock, divided_clocks);
-	input clock;
-	output reg [31:0] divided_clocks;
-	
-	initial
-		divided_clocks <= 0;
-	always @(posedge clock)
-		divided_clocks <= divided_clocks + 1;
-endmodule
+//module clock_divider (clock, divided_clocks);
+//	input clock;
+//	output reg [31:0] divided_clocks;
+//	
+//	initial
+//		divided_clocks <= 0;
+//	always @(posedge clock)
+//		divided_clocks <= divided_clocks + 1;
+//endmodule
 
 module counterTestBench;
 	wire clk, reset;
