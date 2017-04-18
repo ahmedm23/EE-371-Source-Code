@@ -2,45 +2,27 @@ module johnsonCounter(clk, reset, count);
    input clk, reset;
    output reg [3:0] count;
 
-   integer ps, ns;
-      
+   parameter state0 = 4'b0000;
+   parameter state1 = 4'b1000;
+   parameter state2 = 4'b1100;
+   parameter state3 = 4'b1110;
+   parameter state4 = 4'b1111;
+   parameter state5 = 4'b0111;
+   parameter state6 = 4'b0011;
+   parameter state7 = 4'b0001;
+
    always @ (posedge clk)
       if (~reset)
-         ps <= 0;
+         count <= state0;
       else
-         case (ps)
-         0: begin
-               ps = 1;
-               count = 4'b0000;
-            end
-         1: begin
-               ps = 2;
-               count = 4'b1000;
-               end
-         2: begin
-               ps = 3;
-               count = 4'b1100;
-            end
-         3: begin
-               ps = 4;
-               count = 4'b1110;
-            end
-         4: begin
-               ps = 5;
-               count = 4'b1111;
-            end
-         5: begin
-               ps = 6;
-               count = 4'b0111;
-            end
-         6: begin
-               ps = 7;
-               count = 4'b0011;
-            end
-         7: begin
-               ps = 0;
-               count = 4'b0001;
-            end
-      endcase
+         case (count)
+            state0: count = state1;
+            state1: count = state2;
+            state2: count = state3;
+            state3: count = state4;
+            state4: count = state5;
+            state5: count = state6;
+            state6: count = state7;
+            state7: count = state0;
 
 endmodule
