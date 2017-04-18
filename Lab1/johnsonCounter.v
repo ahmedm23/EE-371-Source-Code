@@ -24,5 +24,5 @@ module johnsonCounter(clk, reset, count);
             state5: count = state6;
             state6: count = state7;
             state7: count = state0;
-
+         endcase
 endmodule
