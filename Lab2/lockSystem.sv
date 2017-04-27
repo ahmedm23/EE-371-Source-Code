@@ -3,17 +3,37 @@ module lockSystem (clk, reset);
 	enum { A, B, C, D, E, F } ps, ns;
 	/*
 	A: Both Locked and Unoccupied
-	B: Both Locked and Unoccupied Boat coming from L 
-	C: Both Locked and Unoccupied Boat coming from R
-	D: Gate L Unlocked
-	E: Gate R Unlocked
+	B: Both Locked and Unoccupied, Boat coming from H 
+	C: Both Locked and Unoccupied, Boat coming from L
+	D: Gate H Unlocked
+	E: Gate L Unlocked
 	F: Both Locked and Occupied
 	*/
 	
+	/*
+	A: Unoccupied and Closed
+	B: Unoccupied and Open
+	C: Occupied   and Open
+	D: Occupied   and Closed
+	*/
+	// in terms of the gate, considers if theres a boat in there
+	// consider if we can open the gate or not
+	// what are the conditions for when to open the gate?
+	// water level; if it's occupied
+	// these two conditions: our state diagram becomes either 4 or 5, might be even less (maybe)
+	// occupied and open, occupied closed, unoccupied open, unoccupied closed
+	// moving our state based on waterlevel 
+	// break the state diagram down to the simplest system we can consider
+	// state diagram that is the same coming from both ways
+	
 	always_comb 
 		case (ps)
-			A: //if boat signals from L side and water level > 4.7, go to state B 
-				//else if boat signals from R side and water level < 0.3, go to state C 
+			A: // go to B (opening the gate and letting the ship through)
+			B: // go to C (ship is entering lock)
+			   // go to A (with ship gone, close the gate)
+		   C: // go to D (with ship inside, close the gate)
+	         // go to B (ship left, unoccupied but still open) 		
+		   D: // go to C (open the other gate)
 	
 	
 	
@@ -27,6 +47,5 @@ module lockSystem (clk, reset);
 		else
 			ps <= ns;
 	end
-		
-		
 endmodule
+
