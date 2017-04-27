@@ -1,5 +1,5 @@
-module lockSystem (clk, reset);
-	input clk, reset;
+module lockSystem (clk, reset, highSig, lowSig);
+	input clk, reset, highSig, lowSig;
 	enum { A, B, C, D, E, F } ps, ns;
 	/*
 	A: Both Locked and Unoccupied
@@ -25,12 +25,17 @@ module lockSystem (clk, reset);
 	// moving our state based on waterlevel 
 	// break the state diagram down to the simplest system we can consider
 	// state diagram that is the same coming from both ways
-	
+
 	always_comb 
 		case (ps)
 			A: // go to B (opening the gate and letting the ship through)
+            if (highSig | lowSig)
+               ns = B;
+            else
+               ns = A;
 			B: // go to C (ship is entering lock)
 			   // go to A (with ship gone, close the gate)
+            
 		   C: // go to D (with ship inside, close the gate)
 	         // go to B (ship left, unoccupied but still open) 		
 		   D: // go to C (open the other gate)
