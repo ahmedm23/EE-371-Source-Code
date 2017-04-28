@@ -13,3 +13,18 @@ module controlWater(clk, reset, water_level, water_status);
       water_status[0] = high; // which gate is ok to open
    end
 endmodule
+
+module controlWater_testbench();
+   logic clk, reset
+   logic [5:0] water_level;
+   logic [1:0] water_status;
+
+   controlWater dut(.clk, .reset, .water_level, .water_status);
+
+   // Loop through possible values of water_level
+   integer i;
+   initial begin
+      for (i = 0; i < 50; i++) begin
+         water_level = i;
+      end
+endmodule
