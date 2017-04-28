@@ -7,9 +7,9 @@ module controlWater(clk, reset, water_level, water_status);
    always_comb begin
       low = water_level < 5'd3;
       high = water_level > 5'd47;
-      mid = ~low & ~high;
+      //mid = ~low & ~high;
 
-      water_status[1] = ~mid; // ok to open gate?
+      water_status[1] = low | high; // ok to open gate?
       water_status[0] = high; // which gate is ok to open
    end
 endmodule
