@@ -1,5 +1,5 @@
-module controlOccupied (status, clk, reset, flag);
-	input status, clk, reset;
+module controlOccupied (clk, reset, status, flag);
+	input clk, reset, status;
 	output flag;   
 	enum { A, B } ps, ns;
   
