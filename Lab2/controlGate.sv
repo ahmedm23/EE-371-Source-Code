@@ -1,30 +1,29 @@
-module controlGate (clk, reset, upperSwitch, lowerSwitch, gateState, waterState, occupied);
-   input clk, reset, upperSwitch, lowerSwitch, occupied;
+module controlGate (clk, reset, upper_switch, lower_switch, gate_state, water_status, occupied);
+   input clk, reset, upper_switch, lower_switch, occupied;
    
-   input reg [1:0] waterState;
+   input reg [1:0] water_status;
    
-   output reg [1;0] gateState;
+   output reg [1;0] gate_state;
 
    reg [2:0] ns;
 
    // Next state logic
    always_comb
-      case(gateState)
-         2'b00: if (~occupied & upperSwitch & waterState == 2'b11)     ns = 2'b01;
-               else if (~occupied & lowerSwitch & waterState == 2'b10) ns = 2'b10;
-               else if (occupied & upperSwitch & waterState == 2'b10)  ns = 2'b10  
-               else if (occupied & lowerSwitch & waterState == 2'b11)  ns = 2'b01
-               else                                                    ns = gateState;
-         default:                                                      ns = 2'b00; 
+      case(gate_state)
+         2'b00: if (~occupied & upper_switch & water_status == 2'b11)     ns = 2'b01;
+               else if (~occupied & lower_switch & water_status == 2'b10) ns = 2'b10;
+               else if (occupied & upper_switch & water_status == 2'b10)  ns = 2'b10  
+               else if (occupied & lower_switch & water_status == 2'b11)  ns = 2'b01
+               else                                                       ns = gateState;
+         default:                                                         ns = 2'b00; 
       endcase 
-   end
    
    // DFFs
    always_ff @(posedge clk)
    begina
       if (reset)
-         gateState <= 2'b00;
+         gate_state <= 2'b00;
       else
-         gateState <= ns;
+         gate_state <= ns;
    end
 endmodule
