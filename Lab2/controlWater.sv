@@ -27,4 +27,5 @@ module controlWater_testbench();
       for (i = 0; i < 50; i++) begin
          water_level = i;
       end
+   end
 endmodule
