@@ -1,31 +1,27 @@
 
-module controlWater(clk, reset, water_level, water_status);
+module controlWater(clk, reset, water_level, water_status, w_up, w_down);
    input  logic clk, reset;
-   output logic [1:0] water_status;
-   input  logic [5:0] water_level;
-   logic low, high;
+   output logic [5:0] water_level;
+   input  logic water_up, water_down;
 
-   always_comb begin
-      low = water_level < 6'd3;
-      high = water_level > 6'd47;
+   enum {low, high, raise, lower} ps, ns;
 
-      water_status[1] = low | high; // ok to open gate?
-      water_status[0] = high; // which gate is ok to open
-   end
+   always_comb
+      case (ps)
+         low:   begin
+                   if (w_up)   ns = raise;
+                   else        ns = low;
+                end
+         high:  begin
+                   if (w_down) ns = lower;
+                   else        ns = high;
+                end
+         raise: begin
+                   if (water_level < 
+               
+   
+   always_ff @ (posedge clk)
+      // if raise, add to counter
+      // if lower add to counter
 endmodule
 
-module controlWater_testbench();
-   logic clk, reset;
-   logic [5:0] water_level;
-   logic [1:0] water_status;
-
-   controlWater dut(.clk, .reset, .water_level, .water_status);
-
-   // Loop through possible values of water_level
-   integer i;
-   initial begin
-      for (i = 0; i <= 60; i++) begin
-         water_level = i; #10;
-      end
-   end
-endmodule
