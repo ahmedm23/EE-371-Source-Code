@@ -1,5 +1,5 @@
-module arrivalLight (clk, reset, arrivalSwitch, arrival);
-   input clk, reset, arrivalSwitch;
+module arrivalLight (clk, reset, arr_li, arrival);
+   input clk, reset, arr_li;
 
    output reg arrival;
    reg [3:0] count;
@@ -7,7 +7,7 @@ module arrivalLight (clk, reset, arrivalSwitch, arrival);
    // DFFs
    always_ff @(posedge clk)
    begin
-      if (reset | ~arrivalSwitch)
+      if (reset | ~arr_li)
          begin
             count   <= 4'b1111;
             arrival <= 0; 
@@ -23,10 +23,10 @@ module arrivalLight (clk, reset, arrivalSwitch, arrival);
 endmodule
 
 module arrivalLightTestbench ();
-   logic clk, reset, arrivalSwitch;
+   logic clk, reset, arr_li;
    logic arrival;
    
-   arrivalLight test (clk, reset, arrivalSwitch, arrival);
+   arrivalLight test (clk, reset, arr_li, arrival);
    
    parameter clk_PERIOD=50;
    initial begin
@@ -37,9 +37,9 @@ module arrivalLightTestbench ();
    initial begin
                                                    @(posedge clk);
    reset <= 1;                                     @(posedge clk);
-   reset <= 0; arrivalSwitch = 0;                  @(posedge clk);
+   reset <= 0; arr_li = 0;                         @(posedge clk);
                                                    @(posedge clk);
-               arrivalSwitch = 1;                  @(posedge clk);
+               arr_li = 1;                         @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
