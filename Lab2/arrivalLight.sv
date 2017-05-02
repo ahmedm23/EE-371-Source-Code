@@ -24,7 +24,7 @@ endmodule
 
 module arrivalLightTestbench ();
    logic clk, reset, arr_li;
-   logic arr_li;
+   logic arr_sw;
    
    arrivalLight test (clk, reset, arr_sw, arr_li);
    
