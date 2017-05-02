@@ -1,6 +1,5 @@
 module firstGate (clk, reset, gate1_sw, water_level, arr_li, exited, gate1_li, occupied);
-   input clk, reset, gate1_sw, arr_li, exited;
-   input [5:0] water_level;
+   input clk, reset, gate1_sw, arr_li, exited, water_level;
 
    output reg gate1_li, occupied;
 
@@ -8,7 +7,7 @@ module firstGate (clk, reset, gate1_sw, water_level, arr_li, exited, gate1_li, o
 
    always_comb
       case(ps)
-         A: if (water_level > 47 && arr_li == 1 && gate1_sw == 1) // if the two conditions are met and gate switch is high
+         A: if (water_level == 1 && arr_li == 1 && gate1_sw == 1) // if the two conditions are met and gate switch is high
                ns = B; 
             else
                ns = A;
@@ -32,8 +31,7 @@ endmodule
 
 module firstGateTestBench ();
    
-   logic clk, reset, gate1_sw, arr_li, exited;
-   logic [5:0] water_level;
+   logic clk, reset, gate1_sw, arr_li, exited, water_level;
 
    logic gate1_li, occupied;
 
@@ -49,14 +47,14 @@ module firstGateTestBench ();
    initial begin
                                                    @(posedge clk);
    reset <= 1;                                     @(posedge clk);
-   reset <= 0; arr_li = 0; water_level = 40; gate1_sw = 0; 
-   exited = 0;                                     @(posedge clk);
+   reset <= 0; arr_li = 0; water_level = 0; 
+   gate1_sw = 0; exited = 0;                       @(posedge clk);
                                                    @(posedge clk);
                arr_li = 1; gate1_sw = 1;           @(posedge clk);
-               water_level = 42;                   @(posedge clk);
-               water_level = 44;                   @(posedge clk);
-               water_level = 46;                   @(posedge clk);
-               water_level = 48;                   @(posedge clk);
+                                                   @(posedge clk);
+                                                   @(posedge clk);
+                                                   @(posedge clk);
+               water_level = 1;                    @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
@@ -78,9 +76,8 @@ module firstGateTestBench ();
                                                    @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
-                  exited = 1;                      @(posedge clk);
+               exited = 1;                         @(posedge clk);
                                                    @(posedge clk);
-
    //$stop; // End the simulation.
    end
 endmodule
