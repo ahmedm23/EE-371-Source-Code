@@ -28,8 +28,10 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
                 end
       endcase
 
-      water_high = water_counter > 7'd74; // Timing for water to go 0' -> 4.7'
-      water_low = water_counter > 7'd65; // Timing for water to go 5' -> 0.3'
+      // Timing for water to go 0' -> 4.7'
+      // Timing for water to go 5' -> 0.3'
+      water_high = water_counter > 7'd74 || ps == high;
+      water_low = water_counter > 7'd65 || ps == low;
    end
 
    always_ff @ (posedge clk)
