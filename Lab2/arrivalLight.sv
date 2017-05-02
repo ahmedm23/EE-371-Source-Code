@@ -37,9 +37,9 @@ module arrivalLightTestbench ();
    initial begin
                                                    @(posedge clk);
    reset <= 1;                                     @(posedge clk);
-   reset <= 0; arr_li = 0;                         @(posedge clk);
+   reset <= 0; arr_sw = 0;                         @(posedge clk);
                                                    @(posedge clk);
-               arr_li = 1;                         @(posedge clk);
+               arr_sw = 1;                         @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
