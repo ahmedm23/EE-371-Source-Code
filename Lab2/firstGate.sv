@@ -13,8 +13,12 @@ module firstGate (clk, reset, gate1_sw, water_high, water_low, arr_li, exited, g
                ns = A;
          B: if (gate1_sw == 0)
                ns = C;
+            else
+               ns = B;   
          C: if (exited == 1) 
                ns = A;
+            else
+               ns = C;   
       endcase
 
       assign gate1_li = (ps == B); 
