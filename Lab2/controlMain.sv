@@ -1,11 +1,12 @@
 module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
                     w_up, w_down, arr_li, dep_li, gate1_li, gate2_li);
-//  Arrival Switch SW0 -- Arrival Light LEDR0
-//  Depart  Switch SW1 -- Depart Light  LEDR1
-//  1stGate Switch Sw2 -- 1stGate Light LEDR2  
-//  2ndGate Switch Sw3 -- 2ndGate Light LEDR3
-//  Raise_Water KEY1
-//  Lower_Water KEY2
+//  arr_sw   SW0 -- arr_li   LEDR0
+//  dep_sw   SW1 -- dep_li   LEDR1
+//  gate1_sw Sw2 -- gate1_li LEDR2  
+//  gate2_sw Sw3 -- gate2_li LEDR3
+
+//  w_up    KEY1
+//  w_down  KEY2
 
 //  reset KEY0
    
@@ -17,9 +18,10 @@ module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
 //   After 5 min delay 
 //   Turn on LEDR0
    
-   logic water_level [5:0];
+   // flags for whether the water is high or low
+   logic water_high, water_low;
 
-   controlWater c (.clk, .reset, .w_up, .w_down, .water_level);
+   controlWater c (.clk, .reset, .water_high, .water_low, .w_up, .w_down);
 // Waterlevel Module
 //Input: clk, reset, KEY1, KEY2
 //Logic: Waterlevel
@@ -28,7 +30,7 @@ module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
 
    logic exited, occupied;
    
-   firstGate G1 (.clk, .reset, .gate1_sw, .water_level, .arr_li, .exited,
+   firstGate G1 (.clk, .reset, .gate1_sw, .water_high, .water_low, .arr_li, .exited,
                 .gate1_li, .occupied);
 // Allow Boat to Enter 1st Gate Module
 //Input: clk, reset, SW2, Waterlevel, LEDR0, exited
@@ -46,7 +48,7 @@ module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
 //   assign LEDR2 = (ps == B); 
 //   assign Occupied = (ps == C);
   
-   secondGate G2 (.clk, .reset, .dep_sw, .gate2_sw, .water_level, .occupied, 
+   secondGate G2 (.clk, .reset, .dep_sw, .gate2_sw, .water_high, .water_low, .occupied, 
                   .dep_li, .gate2_li, .exited); 
                   
 // Allow Boat to Exit 2nd Gate Module

@@ -1,8 +1,7 @@
 // Allow Boat to Exit 2nd Gate Module
-module secondGate (clk, reset, dep_sw, gate2_sw, water_level, occupied, 
+module secondGate (clk, reset, dep_sw, gate2_sw, water_high, water_low, occupied, 
                    dep_li, gate2_li, exited);
-	input clk, reset, dep_sw, gate2_sw, occupied;
-   input [5:0] water_level;
+	input clk, reset, dep_sw, gate2_sw, water_high, water_low, occupied;
    output dep_li, gate2_li, exited; 
    
 	enum { A, B, C, D} ps, ns;
@@ -11,7 +10,7 @@ module secondGate (clk, reset, dep_sw, gate2_sw, water_level, occupied,
       case(ps)
          A: if (occupied & dep_sw)           ns = B;
             else                             ns = B;
-         B: if (water_level < 3 & gate2_sw)  ns = C;
+         B: if (water_low & gate2_sw)        ns = C;
             else                             ns = B;
          C: if (~dep_sw & ~gate2_sw)         ns = D;
             else                             ns = C;
@@ -42,11 +41,10 @@ module secondGate (clk, reset, dep_sw, gate2_sw, water_level, occupied,
 endmodule
 
 module secondGateTestBench();
-   logic clk, reset, dep_sw, gate2_sw, occupied;
-   logic [5:0] water_level;
+   logic clk, reset, dep_sw, gate2_sw, water_high, water_low, occupied;
    logic dep_li, gate2_li, exited;
    
-   secondGate test (.clk, .reset, .dep_sw, .gate2_sw, .water_level, .occupied, .dep_li, .gate2_li, .exited);
+   secondGate test (.clk, .reset, .dep_sw, .gate2_sw, .water_high, .water_low, .occupied, .dep_li, .gate2_li, .exited);
    
    parameter clk_PERIOD=50;
    initial begin
@@ -64,8 +62,8 @@ module secondGateTestBench();
                                                    @(posedge clk);
                dep_sw <= 1;                                    @(posedge clk);
                                                    @(posedge clk);
-                                                   @(posedge clk);
-               water_level <= 6'd2; gate2_sw <= 1;                                     @(posedge clk);
+               water_low = 0;                                    @(posedge clk);
+               water_low <= 1; gate2_sw <= 1;                                     @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
