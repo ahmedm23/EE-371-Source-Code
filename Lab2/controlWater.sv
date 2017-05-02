@@ -2,7 +2,6 @@
 module controlWater (clk, reset, water_high, water_low, w_up, w_down);
    input  logic clk, reset;
    output logic water_high, water_low;
-   //output logic [5:0] water_level; // Display water level
    input  logic w_up, w_down;
 
    logic [6:0] water_counter; // This counter for timing of raise/lower water
@@ -36,7 +35,6 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
    always_ff @ (posedge clk)
       if (reset) begin
          ps <= low; // What should be the default state?
-         //water_level <= 6'd50;
          water_counter <= 7'd0;
       end
       else begin
