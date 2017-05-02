@@ -1,5 +1,8 @@
 module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
                     w_up, w_down, arr_li, dep_li, gate1_li, gate2_li);
+                        
+      input clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw, w_up, w_down;
+      output arr_li, dep_li, gate1_li, gate2_li;                
 //  arr_sw   SW0 -- arr_li   LEDR0
 //  dep_sw   SW1 -- dep_li   LEDR1
 //  gate1_sw Sw2 -- gate1_li LEDR2  
@@ -10,7 +13,7 @@ module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
 
 //  reset KEY0
    
-   arrivalLight a (.clk, .reset, .arr_sw, arr_li);  
+   arrivalLight a (.clk, .reset, .arr_sw, .arr_li);  
 // Arrival Module that Ahmed will do 
 //Input: Clk, reset, SW0 
 //Output: LEDR0, (count of timer)
