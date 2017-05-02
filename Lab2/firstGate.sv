@@ -1,5 +1,5 @@
-module firstGate (clk, reset, gate1_sw, water_level, arr_li, exited, gate1_li, occupied);
-   input clk, reset, gate1_sw, arr_li, exited, water_level;
+module firstGate (clk, reset, gate1_sw, water_high, water_low, arr_li, exited, gate1_li, occupied);
+   input clk, reset, gate1_sw, arr_li, exited, water_high, water_low;
 
    output reg gate1_li, occupied;
 
@@ -7,7 +7,7 @@ module firstGate (clk, reset, gate1_sw, water_level, arr_li, exited, gate1_li, o
 
    always_comb
       case(ps)
-         A: if (water_level == 1 && arr_li == 1 && gate1_sw == 1) // if the two conditions are met and gate switch is high
+         A: if (water_high == 1 && arr_li == 1 && gate1_sw == 1) // if the two conditions are met and gate switch is high
                ns = B; 
             else
                ns = A;
