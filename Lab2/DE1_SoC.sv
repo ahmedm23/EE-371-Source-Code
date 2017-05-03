@@ -66,8 +66,9 @@ module De1_SoC_testbench ();
 	logic [9:0] LEDR;
 	logic [3:0] KEY;
 	logic [9:0] SW;
+   logic clk;
 	DE1_SoC dut (.HEX0, .HEX1, .HEX2, .HEX3, .HEX4, .HEX5, .KEY, .LEDR,
-	.SW);
+	.SW, .CLOCK_50(clk));
 
    parameter CLK_PER = 10;
    initial begin
