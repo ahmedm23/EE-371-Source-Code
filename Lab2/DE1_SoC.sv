@@ -60,3 +60,46 @@ endmodule
 //	output logic out;
 //	assign out = (i1 & sel) | (i0 & ~sel);
 //endmodule
+
+module De1_SoC_testbench ();
+	logic [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
+	logic [9:0] LEDR;
+	logic [3:0] KEY;
+	logic [9:0] SW;
+	DE1_SoC dut (.HEX0, .HEX1, .HEX2, .HEX3, .HEX4, .HEX5, .KEY, .LEDR,
+	.SW);
+
+   parameter CLK_PER = 10;
+   initial begin
+      clk <= 1;
+      forever #(CLK_PER/2) clk <= ~clk;
+   end
+
+   integer i;
+   initial begin
+                                             @(posedge clk);
+      KEY[0] <= 1;                            @(posedge clk);
+      KEY[0] <= 0;                            @(posedge clk);
+                   SW[0] = 1;               @(posedge clk);
+                                             @(posedge clk);
+                                             @(posedge clk);
+		KEY[1] <= 1;               @(posedge clk);
+	  for (i = 0; i < 8; i++) begin
+         @(posedge clk);
+      end
+					SW[2] = 1;                                       @(posedge clk);
+                                             @(posedge clk);
+                             @(posedge clk);
+                                             @(posedge clk);
+                                             @(posedge clk);
+                             @(posedge clk);
+                                             @(posedge clk);
+                                             @(posedge clk);
+                              @(posedge clk);
+                                 @(posedge clk);
+                               @(posedge clk);
+                               @(posedge clk);
+
+      $stop;
+   end
+endmodule
