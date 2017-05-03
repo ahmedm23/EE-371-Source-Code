@@ -37,7 +37,7 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
    always_ff @ (posedge clk)
       if (reset) begin
          ps <= low; // What should be the default state?
-         water_counter <= 7'd0;
+         water_counter <= 8'd0;
       end
       else begin
          ps <= ns;
