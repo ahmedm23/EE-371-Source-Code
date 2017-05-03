@@ -30,7 +30,7 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
 
       // Timing for water to go 0' -> 4.7'
       // Timing for water to go 5' -> 0.3'
-      water_high = water_counter > 8'd74 | ps == high;
+      water_high = (water_counter > 8'd74) | ps == high;
       water_low = (water_counter > 8'd65 & ps == lower) | ps == low;
    end
 
@@ -44,6 +44,34 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
          if (ps == raise | ps == lower) water_counter <= water_counter + 8'd1;
          else                           water_counter <= 8'd0;
       end
+endmodule
+
+module comparator (gt, eq, lt, a, b);
+   output logic gt, eq, lt;
+   input  logic [3:0] a, b;
+
+   logic [3:0] gt_arr, eq_arr, lt_arr;
+
+   always_comb begin
+      gt_arr[3] = a[3] & ~b[3];
+      gt_arr[2] = a[2] & ~b[2];
+      gt_arr[1] = a[1] & ~b[1];
+      gt_arr[0] = a[0] & ~b[0];
+ 
+      eq_arr[3] = a[3] ~^ b[3];
+      eq_arr[2] = a[2] ~^ b[2];
+      eq_arr[1] = a[1] ~^ b[1];
+      eq_arr[0] = a[0] ~^ b[0];
+      
+      lt_arr[3] = ~a[3] & b[3];
+      lt_arr[2] = ~a[2] & b[2];
+      lt_arr[1] = ~a[1] & b[1];
+      lt_arr[0] = ~a[0] & b[0];
+   end
+
+   assign gt = gt_arr[3] | gt_arr[2] | gt_arr[1] | gt_arr[0];
+   assign eq = eq_arr[3] & eq_arr[2] & eq_arr[1] & eq_arr[0];
+   assign lt = lt_arr[3] | lt_arr[2] | lt_arr[1] | lt_arr[0];
 endmodule
 
 module controlWater_testbench ();
