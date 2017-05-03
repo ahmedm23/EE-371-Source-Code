@@ -46,6 +46,19 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
       end
 endmodule
 
+module comparator_8bit (gt, eq, lt, a, b);
+   output logic gt, eq, lt;
+   input  logic [7:0] a, b;
+   logic gt_l, gt_r, eq_l, eq_r, lt_l, lt_r;
+
+   comparator_4bit l_comp (.gt(gt_l), .eq(eq_l), .lt(lt_l), a[7:4], b[7:4]);
+   comparator_4bit r_comp (.gt(gt_r), .eq(eq_r), .lt(lt_r), a[3:0], b[3:0]);
+
+   assign gt = gt_l | gt_r;
+   assign eq = eq_l & eq_r;
+   assign lt = lt_l | lt_r;
+endmodule
+
 module comparator_4bit (gt, eq, lt, a, b);
    output logic gt, eq, lt;
    input  logic [3:0] a, b;
@@ -114,6 +127,23 @@ module controlWater_testbench ();
          @(posedge clk);
       end
       $stop;
+   end
+endmodule
+
+module comparator_8bit_testbench();
+   logic gt, eq, lt;
+   logic [7:0] a, b;
+
+   comparator_8bit dut (.gt, .eq, .lt, .a, .b);
+
+   integer i, j;
+   initial begin
+      for (i = 0; i < 256; i++) begin
+         a = i;
+         for (j = 0; j < 256; j++) begin
+            b = j;
+         end
+      end
    end
 endmodule
 
