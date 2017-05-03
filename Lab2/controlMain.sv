@@ -1,9 +1,17 @@
-module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
+module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw, dir,
                     w_up, w_down, arr_li, dep_li, gate1_li, gate2_li, occupied, water_high, water_low);
                         
-      input clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw, w_up, w_down;
-      output arr_li, dep_li, gate1_li, gate2_li, occupied, water_high, water_low;                
-//  arr_sw   SW0 -- arr_li   LEDR0
+   input clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw, dir, w_up, w_down;
+   output arr_li, dep_li, gate1_li, gate2_li, occupied, water_high, water_low;                
+
+//   logic water_flag1, water_flag2;
+//   mux_water_level high (.water_flag(water_flag1), .water_low, .water_high, .dir);
+//   mux_water_level low (.water_flag(water_flag2), .water_low(water_high), .water_high(water_low), .dir);
+
+
+         
+      
+      //  arr_sw   SW0 -- arr_li   LEDR0
 //  dep_sw   SW1 -- dep_li   LEDR1
 //  gate1_sw Sw2 -- gate1_li LEDR2  
 //  gate2_sw Sw3 -- gate2_li LEDR3
@@ -15,21 +23,30 @@ module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
    controlWater c (.clk, .reset, .water_high, .water_low, .w_up, .w_down);
 
    logic exited;//, occupied;
-   firstGate G1 (.clk, .reset, .gate1_sw, .water_high, .water_low, .arr_li, .exited,
+   firstGate G1 (.clk, .reset, .gate1_sw, .water_high, .arr_li, .exited,
                 .gate1_li, .occupied);
                 
-   secondGate G2 (.clk, .reset, .dep_sw, .gate2_sw, .water_high, .water_low, .occupied, 
+   secondGate G2 (.clk, .reset, .dep_sw, .gate2_sw, .water_low, .occupied, 
                   .dep_li, .gate2_li, .exited); 
-                  
-
-  
 endmodule
 
+// muxes the water outputs
+//module mux_water_level (water_low, water_high, dir, water_flag);
+//   input  logic water_low, water_high, dir;
+//   output logic water_flag;
+//   
+//   assign water_flag = (water_low & dir) | (water_high & ~dir);
+//endmodule
+
+
+
+
+
 module controlMain_testbench ();
-	logic clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw,
+	logic clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw, dir,
                     w_up, w_down, arr_li, dep_li, gate1_li, gate2_li, occupied, water_high, water_low;
 
-	controlMain dut (.clk, .reset, .arr_sw, .dep_sw, .gate1_sw, .gate2_sw,
+	controlMain dut (.clk, .reset, .arr_sw, .dep_sw, .gate1_sw, .gate2_sw, .dir,
                      .w_up, .w_down, .arr_li, .dep_li, .gate1_li, .gate2_li, 
 					 .occupied, .water_high, .water_low);
    parameter CLK_PER = 10;
@@ -48,7 +65,7 @@ module controlMain_testbench ();
                                              @(posedge clk);
 		w_up <= 1;
 		gate1_sw <= 1;  						      @(posedge clk);
-	  for (i = 0; i < 8; i++) begin
+	  for (i = 0; i < 50; i++) begin
          @(posedge clk);
       end
 	// arrival light and gate1 light are on at this point       
@@ -56,9 +73,9 @@ module controlMain_testbench ();
 	// occupied flag is on				
 											 @(posedge clk);
                                              @(posedge clk);
-	dep_sw <= 1; w_down <= 1;	gate2_sw <= 1;									 
+	dep_sw <= 1; //w_down <= 1;	gate2_sw <= 1;									 
                                              @(posedge clk);
-    for (i = 0; i < 8; i++) begin
+    for (i = 0; i < 50; i++) begin
          @(posedge clk);
       end										 
                                                @(posedge clk);
