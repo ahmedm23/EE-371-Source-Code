@@ -4,7 +4,7 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
    output logic water_high, water_low;
    input  logic w_up, w_down;
 
-   logic [6:0] water_counter; // This counter for timing of raise/lower water
+   logic [7:0] water_counter; // This counter for timing of raise/lower water
 
    enum {low, high, raise, lower} ps, ns;
 
@@ -19,19 +19,19 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
                    else        ns = high;
                 end
          raise: begin
-                   if (water_counter < 7'd80) ns = raise;
+                   if (water_counter < 8'd80) ns = raise;
                    else                       ns = high;
                 end
          lower: begin
-                   if (water_counter < 7'd70) ns = lower;
+                   if (water_counter < 8'd70) ns = lower;
                    else                       ns = low;
                 end
       endcase
 
       // Timing for water to go 0' -> 4.7'
       // Timing for water to go 5' -> 0.3'
-      water_high = water_counter > 7'd74 | ps == high;
-      water_low = (water_counter > 7'd65 && ps == lower) | ps == low;
+      water_high = water_counter > 8'd74 | ps == high;
+      water_low = (water_counter > 8'd65 & ps == lower) | ps == low;
    end
 
    always_ff @ (posedge clk)
@@ -41,8 +41,8 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
       end
       else begin
          ps <= ns;
-         if (ps == raise | ps == lower) water_counter <= water_counter + 7'd1;
-         else                           water_counter <= 7'd0;
+         if (ps == raise | ps == lower) water_counter <= water_counter + 8'd1;
+         else                           water_counter <= 8'd0;
       end
 endmodule
 
