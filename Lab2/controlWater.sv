@@ -46,7 +46,7 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
       end
 endmodule
 
-module comparator (gt, eq, lt, a, b);
+module comparator_4bit (gt, eq, lt, a, b);
    output logic gt, eq, lt;
    input  logic [3:0] a, b;
 
@@ -114,5 +114,22 @@ module controlWater_testbench ();
          @(posedge clk);
       end
       $stop;
+   end
+endmodule
+
+module comparator_4bit_testbench ();
+   logic gt, eq, lt;
+   logic [3:0] a, b;
+
+   comparator_4bit dut (.gt, .eq, .lt, .a, .b);
+
+   integer i, j;
+   initial begin
+      for (i = 0; i < 16; i++) begin
+         a = i;
+         for (j = 0; j < 16; j++) begin
+            b = j;
+         end
+      end
    end
 endmodule
