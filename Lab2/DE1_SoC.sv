@@ -4,6 +4,15 @@ module DE1_SoC(CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, SW);
 	input  [9:0] SW;
 	output  [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
 	output  [9:0] LEDR;
+   
+   assign HEX0 = 7'b1111111;
+	assign HEX1 = 7'b1111111;
+	assign HEX2 = 7'b1111111;
+	assign HEX3 = 7'b1111111;
+   assign HEX4 = 7'b1111111;
+	assign HEX5 = 7'b1111111;
+
+      
 	 
 	// Clock divider
 	// tBase[0] == 50MHz
@@ -23,7 +32,8 @@ module DE1_SoC(CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, SW);
 	controlMain main (.clk(tBase[23]), .reset(~KEY[0]), 
 							.arr_sw(SW[0]), .dep_sw(SW[1]), .gate1_sw(SW[2]), .gate2_sw(SW[3]),
                      .w_up(~KEY[1]), .w_down(~KEY[2]), 
-							.arr_li(LEDR[0]), .dep_li(LEDR[1]), .gate1_li(LEDR[2]), .gate2_li(LEDR[3]));
+							.arr_li(LEDR[0]), .dep_li(LEDR[1]), .gate1_li(LEDR[2]), .gate2_li(LEDR[3]),
+                     .occupied(LEDR[6]), .water_high(LEDR[9]), .water_low(LEDR[8]));
 
 //	logic G1, G2, G1_f, G2_f;
 //	mux_gate mg (.G1(SW[2]), .G2(SW[3]), .dir(SW[5]), .(G1_f, .G2_f);
@@ -61,46 +71,43 @@ endmodule
 //	assign out = (i1 & sel) | (i0 & ~sel);
 //endmodule
 
-module De1_SoC_testbench ();
-	logic [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
-	logic [9:0] LEDR;
-	logic [3:0] KEY;
-	logic [9:0] SW;
-   logic clk;
-	DE1_SoC dut (.HEX0, .HEX1, .HEX2, .HEX3, .HEX4, .HEX5, .KEY, .LEDR,
-	.SW, .CLOCK_50(clk));
-
-   parameter CLK_PER = 10;
-   initial begin
-      clk <= 1;
-      forever #(CLK_PER/2) clk <= ~clk;
-   end
-
-   integer i;
-   initial begin
-                                             @(posedge clk);
-      KEY[0] <= 1;                            @(posedge clk);
-      KEY[0] <= 0;                            @(posedge clk);
-                   SW[0] = 1;               @(posedge clk);
-                                             @(posedge clk);
-                                             @(posedge clk);
-		KEY[1] <= 1;               @(posedge clk);
-	  for (i = 0; i < 8; i++) begin
-         @(posedge clk);
-      end
-					SW[2] = 1;                                       @(posedge clk);
-                                             @(posedge clk);
-                             @(posedge clk);
-                                             @(posedge clk);
-                                             @(posedge clk);
-                             @(posedge clk);
-                                             @(posedge clk);
-                                             @(posedge clk);
-                              @(posedge clk);
-                                 @(posedge clk);
-                               @(posedge clk);
-                               @(posedge clk);
-
-      $stop;
-   end
-endmodule
+//module DE1_SoC_testbench ();
+//	logic [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
+//	logic [9:0] LEDR;
+//	logic [3:0] KEY;
+//	logic [9:0] SW;
+//   logic clk;
+//	DE1_SoC dut (.HEX0, .HEX1, .HEX2, .HEX3, .HEX4, .HEX5, .KEY, .LEDR,
+//	.SW, .CLOCK_50);
+//
+//	parameter CLOCK_PERIOD=100;
+//	initial begin
+//		CLOCK_50 <= 0;
+//		forever #(CLOCK_PERIOD/2) CLOCK_50 <= ~CLOCK_50;
+//	end
+//   integer i;
+//   initial begin
+//                                             @(posedge CLOCK_50);
+//      KEY[0] <= 1;                           @(posedge CLOCK_50);
+//      KEY[0] <= 0;                           @(posedge CLOCK_50);
+//                   SW[0] <= 1;                @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//		KEY[1] <= 0;                           @(posedge CLOCK_50);
+//	  for (i = 0; i < 8; i++) begin
+//         @(posedge CLOCK_50);
+//      end
+//					SW[2] <= 1;                    @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//                                             @(posedge CLOCK_50);
+//
+//
+////      $stop;
+//   end
+//endmodule
