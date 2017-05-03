@@ -1,21 +1,20 @@
 module firstGate (clk, reset, gate1_sw, water_high, water_low, arr_li, exited, gate1_li, occupied);
-   input clk, reset, gate1_sw, arr_li, exited, water_high, water_low;
-
-   output reg gate1_li, occupied;
+   input logic clk, reset, gate1_sw, arr_li, exited, water_high, water_low;
+   output logic gate1_li, occupied;
 
    enum { A, B, C} ps, ns;
 
    always_comb
       case(ps)
-         A: if (water_high == 1 && arr_li == 1 && gate1_sw == 1) // if the two conditions are met and gate switch is high
+         A: if (water_high & arr_li & gate1_sw) // if the two conditions are met and gate switch is high
                ns = B; 
             else
                ns = A;
-         B: if (gate1_sw == 0)
+         B: if (~gate1_sw & ~arr_li)
                ns = C;
             else
                ns = B;   
-         C: if (exited == 1) 
+         C: if (exited) 
                ns = A;
             else
                ns = C;   
@@ -34,9 +33,7 @@ module firstGate (clk, reset, gate1_sw, water_high, water_low, arr_li, exited, g
 endmodule
 
 module firstGateTestBench ();
-   
    logic clk, reset, gate1_sw, arr_li, exited, water_level;
-
    logic gate1_li, occupied;
 
    firstGate test (clk, reset, gate1_sw, water_level, arr_li, exited, gate1_li, occupied);
