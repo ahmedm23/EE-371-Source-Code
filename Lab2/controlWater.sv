@@ -51,12 +51,18 @@ module comparator_8bit (gt, eq, lt, a, b);
    input  logic [7:0] a, b;
    logic gt_l, gt_r, eq_l, eq_r, lt_l, lt_r;
 
-   comparator_4bit l_comp (.gt(gt_l), .eq(eq_l), .lt(lt_l), .a(a[7:4]), .b(b[7:4]));
-   comparator_4bit r_comp (.gt(gt_r), .eq(eq_r), .lt(lt_r), .a(a[3:0]), .b(b[3:0]));
+   //comparator_4bit l_comp (.gt(gt_l), .eq(eq_l), .lt(lt_l), .a(a[7:4]), .b(b[7:4]));
+   //comparator_4bit r_comp (.gt(gt_r), .eq(eq_r), .lt(lt_r), .a(a[3:0]), .b(b[3:0]));
 
+   assign gt = a > b;
+   assign eq = a == b;
+   assign lt = a < b;
+
+
+/*
    assign gt = gt_l | gt_r;
    assign eq = eq_l & eq_r;
-   assign lt = lt_l | lt_r;
+   assign lt = lt_l | lt_r;*/
 endmodule
 
 module comparator_4bit (gt, eq, lt, a, b);
