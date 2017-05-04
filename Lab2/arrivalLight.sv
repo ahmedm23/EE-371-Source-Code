@@ -9,7 +9,7 @@ module arrivalLight (clk, reset, arr_sw, arr_li);
    begin
       if (reset | ~arr_sw)
          begin
-            //count   <= 5'b11111;
+            count   <= 5'b11111;
             arr_li <= 0; 
          end
       else if (count == 5'b0000) 
