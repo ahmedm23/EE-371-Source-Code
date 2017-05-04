@@ -1,7 +1,7 @@
 // Allow Boat to Exit 2nd Gate Module
-module secondGate (clk, reset, dep_sw, gate2_sw, water_high, water_low, occupied, 
+module secondGate (clk, reset, dep_sw, gate2_sw, water_low, occupied, 
                    dep_li, gate2_li, exited);
-	input clk, reset, dep_sw, gate2_sw, water_high, water_low, occupied;
+	input clk, reset, dep_sw, gate2_sw, water_low, occupied;
    output dep_li, gate2_li, exited; 
    
 	enum { A, B, C, D} ps, ns;
@@ -41,10 +41,10 @@ module secondGate (clk, reset, dep_sw, gate2_sw, water_high, water_low, occupied
 endmodule
 
 module secondGateTestBench();
-   logic clk, reset, dep_sw, gate2_sw, water_high, water_low, occupied;
+   logic clk, reset, dep_sw, gate2_sw, water_low, occupied;
    logic dep_li, gate2_li, exited;
    
-   secondGate test (.clk, .reset, .dep_sw, .gate2_sw, .water_high, .water_low, .occupied, .dep_li, .gate2_li, .exited);
+   secondGate test (.clk, .reset, .dep_sw, .gate2_sw, .water_low, .occupied, .dep_li, .gate2_li, .exited);
    
    parameter clk_PERIOD=50;
    initial begin

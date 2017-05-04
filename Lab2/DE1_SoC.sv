@@ -40,14 +40,21 @@ module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, SW);
 	mux_gate mg (.G1(SW[2]), .G2(SW[3]), .dir, .G1_f, .G2_f);
 
 	logic L1, L2, L1_f, L2_f;
-	mux_gate_light mgl (.L1, .L2, .dir, .L1_f(LEDR[2]), .L2_f(LEDR[3]));
+	mux_gate_light mgl (.L1, .L2, .dir, .L1_f, .L2_f);
    
+   assign LEDR[2] = L1_f;
+   assign LEDR[3] = L2_f;
 
 
-	controlMain main (.clk(tBase[21]), .reset(~KEY[0]), 
+//	controlMain main (.clk(tBase[22]), .reset(~KEY[0]), 
+//							.arr_sw(SW[0]), .dep_sw(SW[1]), .gate1_sw(G1_f), .gate2_sw(G2_f), .dir,
+//                     .w_up(~KEY[1]), .w_down(~KEY[2]), 
+//							.arr_li(LEDR[0]), .dep_li(LEDR[1]), .gate1_li(L1), .gate2_li(L2), 
+//                     .occupied(LEDR[6]), .water_high(LEDR[9]), .water_low(LEDR[8]));	
+	controlMain main (.clk(tBase[22]), .reset(~KEY[0]), 
 							.arr_sw(SW[0]), .dep_sw(SW[1]), .gate1_sw(G1_f), .gate2_sw(G2_f), .dir,
                      .w_up(~KEY[1]), .w_down(~KEY[2]), 
-							.arr_li(LEDR[0]), .dep_li(LEDR[1]), .gate1_li(L1_f), .gate2_li(L2_f), 
+							.arr_li(LEDR[0]), .dep_li(LEDR[1]), .gate1_li(L1), .gate2_li(L2), 
                      .occupied(LEDR[6]), .water_high(LEDR[9]), .water_low(LEDR[8]));		
 						
 endmodule
@@ -62,6 +69,7 @@ module mux_gate (G1, G2, dir, G1_f, G2_f);
 	assign G2_f = (G1 & dir) | (G2 & ~dir);
 endmodule
 
+      
 module mux_gate_light (L1, L2, dir, L1_f, L2_f);
 	input logic L1, L2, dir;
 	output logic L1_f, L2_f;

@@ -1,5 +1,5 @@
-module firstGate (clk, reset, gate1_sw, water_high, water_low, arr_li, exited, gate1_li, occupied);
-   input logic clk, reset, gate1_sw, arr_li, exited, water_high, water_low;
+module firstGate (clk, reset, gate1_sw, water_high, arr_li, exited, gate1_li, occupied);
+   input logic clk, reset, gate1_sw, arr_li, exited, water_high;
    output logic gate1_li, occupied;
 
    enum { A, B, C} ps, ns;
@@ -33,10 +33,10 @@ module firstGate (clk, reset, gate1_sw, water_high, water_low, arr_li, exited, g
 endmodule
 
 module firstGateTestBench ();
-   logic clk, reset, gate1_sw, arr_li, exited, water_level;
+   logic clk, reset, gate1_sw, arr_li, exited, water_high;
    logic gate1_li, occupied;
 
-   firstGate test (clk, reset, gate1_sw, water_level, arr_li, exited, gate1_li, occupied);
+   firstGate test (clk, reset, gate1_sw, water_high, arr_li, exited, gate1_li, occupied);
    
    parameter clk_PERIOD=100;
    initial begin
@@ -48,14 +48,14 @@ module firstGateTestBench ();
    initial begin
                                                    @(posedge clk);
    reset <= 1;                                     @(posedge clk);
-   reset <= 0; arr_li = 0; water_level = 0; 
+   reset <= 0; arr_li = 0; water_high = 0; 
    gate1_sw = 0; exited = 0;                       @(posedge clk);
                                                    @(posedge clk);
                arr_li = 1; gate1_sw = 1;           @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
-               water_level = 1;                    @(posedge clk);
+               water_high = 1;                     @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
                                                    @(posedge clk);
