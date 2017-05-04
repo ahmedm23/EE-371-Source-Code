@@ -2,23 +2,23 @@ module arrivalLight (clk, reset, arr_sw, arr_li);
    input clk, reset, arr_sw;
 
    output reg arr_li;
-   reg [3:0] count;
+   reg [4:0] count;
 
    // DFFs
    always_ff @(posedge clk)
    begin
       if (reset | ~arr_sw)
          begin
-            count   <= 4'b1111;
+            //count   <= 5'b11111;
             arr_li <= 0; 
          end
-      else if (count == 4'b000) 
+      else if (count == 5'b0000) 
          begin
             arr_li <= 1;
-            count   <= 4'b1111;
+            count   <= 5'b11111;
          end
       else
-         count <= count - 4'b0001;
+         count <= count - 5'b00001;
    end
 endmodule
 
