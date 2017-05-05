@@ -9,7 +9,7 @@ module secondGate (clk, reset, dep_sw, gate2_sw, water_low, occupied,
    always_comb
       case(ps)
          A: if (occupied & dep_sw)           ns = B;
-            else                             ns = B;
+            else                             ns = A;
          B: if (water_low & gate2_sw)        ns = C;
             else                             ns = B;
          C: if (~dep_sw & ~gate2_sw)         ns = D;
