@@ -18,7 +18,8 @@ module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw, dir,
 //  reset KEY0
    
    arrivalLight a (.clk, .reset, .arr_sw, .arr_li);  
-   controlWater c (.clk, .reset, .water_high, .water_low, .w_up, .w_down);
+   controlWater c (.clk, .reset, .water_high, .water_low, .w_up, .w_down,
+                   .gate1_li, .gate2_li);
 
    logic exited;
    firstGate G1 (.clk, .reset, .gate1_sw, .water_high(water_flag1), .arr_li, .exited,
