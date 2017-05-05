@@ -3,7 +3,7 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down, gate1_li,
                      gate2_li);
    input  logic clk, reset;
    output logic water_high, water_low;
-   input  logic w_up, w_down;
+   input  logic w_up, w_down, gate1_li, gate2_li;
 
    logic [7:0] water_counter; // This counter for timing of raise/lower water
 
