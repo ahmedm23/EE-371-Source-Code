@@ -1,5 +1,6 @@
 
-module controlWater (clk, reset, water_high, water_low, w_up, w_down);
+module controlWater (clk, reset, water_high, water_low, w_up, w_down, gate1_li,
+                     gate2_li);
    input  logic clk, reset;
    output logic water_high, water_low;
    input  logic w_up, w_down;
@@ -11,12 +12,12 @@ module controlWater (clk, reset, water_high, water_low, w_up, w_down);
    always_comb begin
       case (ps)
          low:   begin
-                   if (w_up) ns = raise;
-                   else      ns = low;
+                   if (w_up & ~gate1_li & ~gate2_li) ns = raise;
+                   else                              ns = low;
                 end
          high:  begin
-                   if (w_down) ns = lower;
-                   else        ns = high;
+                   if (w_down & ~gate1_li & ~gate2_li) ns = lower;
+                   else                                ns = high;
                 end
          raise: begin
                    if (water_counter < 8'd80) ns = raise;
