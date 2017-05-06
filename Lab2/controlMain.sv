@@ -1,5 +1,5 @@
 module controlMain (clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw, dir,
-                    w_up, w_down, arr_li, dep_li, gate1_li, gate2_li, occupied, water_high, water_low);                        
+                    w_up, w_down, arr_li, dep_li, gate1_li, gate2_li, occupied, water_high, water_low);
    input clk, reset, arr_sw, dep_sw, gate1_sw, gate2_sw, dir, w_up, w_down;
    output arr_li, dep_li, gate1_li, gate2_li, occupied, water_high, water_low;                
    
