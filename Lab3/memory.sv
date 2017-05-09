@@ -27,27 +27,31 @@ module memory_testbench ();
 
    integer i;
    initial begin
-                                             @(posedge clk);
-      reset <= 1;                            @(posedge clk);
-      reset <= 0;                            @(posedge clk);
-                                             @(posedge clk);
-                                             @(posedge clk);
-                  scan <= 1;                 @(posedge clk);
+                                                       @(posedge clk);
+      reset <= 1;                                      @(posedge clk);
+      reset <= 0;                                      @(posedge clk);
+                                                       @(posedge clk);
+                                                       @(posedge clk);
+                  scan <= 1;                           @(posedge clk);
       for (i = 0; i < 108; i++) begin
          @(posedge clk);
       end
-                  scan <= 0;                 @(posedge clk);
-                                             @(posedge clk);
-                             transfer <= 1   @(posedge clk);
+                  scan <= 0;                           @(posedge clk);
+                                                       @(posedge clk);
+                             transfer <= 1             @(posedge clk);
       for (i = 0; i < 60; i++) begin
          @(posedge clk);
       end
-                             transfer <= 0   @(posedge clk);
-                                             @(posedge clk);
-                                             @(posedge clk);
-                                             @(posedge clk);
-                                             @(posedge clk);
-                                             @(posedge clk);
+                             transfer <= 0             @(posedge clk);
+                                                       @(posedge clk);
+                  scan <= 1;                           @(posedge clk);
+      for (i = 0; i < 10; i++) begin
+         @(posedge clk);
+      end
+                  scan <= 0;                           @(posedge clk);
+                                           flush <= 1; @(posedge clk);
+                                           flush <= 0; @(posedge clk);
+                                                       @(posedge clk);
    end
    $stop
 endmodule
