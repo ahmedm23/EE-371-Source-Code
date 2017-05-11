@@ -3,7 +3,7 @@ module memoryToHexDisplay(hex_display, mem_used);
    	output reg [6:0] hex_display;
 	reg [7:0] mem_divided;
 	
-	assign mem_divided = (mem_used * 205) >> 11;;	
+	assign mem_divided = (mem_used * 205) >> 11;	
 	
 	always_comb
 		case (mem_divided)
