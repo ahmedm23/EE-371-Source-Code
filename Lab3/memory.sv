@@ -1,13 +1,14 @@
 
-module memory (clk, reset, mem_used, scan, transfer, flush);
+module memory (clk, reset, mem_used, scan, transfer);
    input  logic clk, reset;
    output logic [7:0] mem_used;
-   input  logic scan, transfer, flush;
+   input  logic scan, transfer;
 
    always_ff @ (posedge clk)
-      if (reset | flush)                   mem_used <= 8'd0;
+      if (reset)                   mem_used <= 8'd0;
       else if (scan & mem_used < 8'd100)   mem_used <= mem_used + 8'd1;
-      else if (transfer & mem_used > 8'd0) mem_used <= mem_used - 8'd2;
+      else if (transfer & mem_used > 8'd2) mem_used <= mem_used - 8'd3;
+      else if (transfer & mem_used > 8'd0) mem_used <= mem_used - 8'd1;
       else                                 mem_used <= mem_used;
 
 endmodule
