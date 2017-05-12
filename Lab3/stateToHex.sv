@@ -3,11 +3,11 @@ module stateToHex(hex_state, state);
     input logic [2:0] state;
 	
 	parameter
-	low_power    = 3'b000, 
-	standby      = 3'b001, 
-	collecting   = 3'b010, 
-	idle 	     = 3'b011, 
-	transferring = 3'b100;
+	low_power   = 3'b000, 
+	standby     = 3'b001, 
+	collecting  = 3'b010, 
+	idle 	    = 3'b011, 
+	flushing 	= 3'b100;
 	
 	always_comb 
 		case (state)
@@ -15,7 +15,7 @@ module stateToHex(hex_state, state);
 			standby:      hex_state = 7'b0010010; // S
 			collecting:   hex_state = 7'b1000110; // C
 			idle:		  hex_state = 7'b1111001; // I
-			transferring: hex_state = 7'b0000111; // t
+			flushing: 	  hex_state = 7'b0001110; // F
 			default:	  hex_state = 7'b1111111; // off			
 		endcase
 endmodule

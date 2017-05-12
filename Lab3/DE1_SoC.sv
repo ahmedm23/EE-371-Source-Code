@@ -12,24 +12,21 @@ module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, SW);
 	reg [25:0] tBase;
 	always@(posedge CLOCK_50) tBase <= tBase + 1'b1;  
 	
-	/* FOR SCANNER 1 ---------------------
+	/* FOR SCANNER  ---------------------
 	clk 							tBase[parameter]
 	reset 							KEY[0]
-	
     hex_state_s1					HEX5
 	hex_count_s1 					HEX4
-	
-	transfer 
-	
-	FOR SCANNER 2 -------------------------
-	clk 							tBase[parameter]
-	reset 							KEY[0]
-	
 	hex_state_s2					HEX1
 	hex_count_s2 					HEX0
+	flush 							SW[9]
 	
-	transfer
+	The hex_states display what state each scanner is in, 
+	and the hex_count displays the percentage of the buffer for each scanner
 	*/
+	controlScanner cs (.clk(tBase[23]), .reset(KEY[0]), .hex_state_s1(HEX5), 
+					   .hex_count_s1(HEX4), .hex_state_s2(HEX1), .hex_count_s2(HEX0), 
+					   .flush(SW[9]));
 	
 endmodule
 
