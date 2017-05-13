@@ -19,15 +19,16 @@ module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, SW);
 	hex_count_s1 					HEX4
 	hex_state_s2					HEX1
 	hex_count_s2 					HEX0
+	rdy_flush						LEDR[9]
 	flush 							SW[9]
 	
 	The hex_states display what state each scanner is in, 
 	and the hex_count displays the percentage of the buffer for each scanner
+	rdy_flush indicates whether either scanner reaches 80% buffered
 	*/
-	controlScanner cs (.clk(tBase[23]), .reset(~KEY[0]), .hex_state_s1(HEX5), 
+	controlScanner cs (.clk(tBase[20]), .reset(~KEY[0]), .hex_state_s1(HEX5), 
 					   .hex_count_s1(HEX4), .hex_state_s2(HEX1), .hex_count_s2(HEX0), 
-					   .flush(SW[9]));
-	
+					   .rdy_flush(LEDR[9]), .flush(SW[9]));
 endmodule
 
 

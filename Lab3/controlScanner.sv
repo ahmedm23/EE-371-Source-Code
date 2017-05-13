@@ -1,5 +1,6 @@
-module controlScanner(clk, reset, hex_state_s1, hex_count_s1, hex_state_s2, hex_count_s2, flush); 
+module controlScanner(clk, reset, hex_state_s1, hex_count_s1, hex_state_s2, hex_count_s2, rdy_flush, flush); 
 	output logic [6:0] hex_state_s1, hex_count_s1, hex_state_s2, hex_count_s2;
+	output logic rdy_flush;
 	input logic clk, reset, flush;  
 	
     logic [7:0] mem_used_s1, mem_used_s2;
@@ -15,9 +16,18 @@ module controlScanner(clk, reset, hex_state_s1, hex_count_s1, hex_state_s2, hex_
 	stateToHex s1 (.state(state_s1), .hex_state);
 	stateToHex s2 (.state(state_s2), .hex_state);
 	
-	// primScanner
-	// altScanner
-	
-	
+	logic scan_status, 
+		  start_scan_out, 
+		  start_scan_in, 
+		  goto_stby_in, 
+		  goto_stby_out;
+		  
+    logic [7:0] alt_mem_used;
+	primScanner ps (.clk, .reset, .scan_status, .rdy_flush, .start_scan_out,
+					.goto_stby_out, .mem_used, .start_scan_in, .goto_stby_in, .flush,
+					.alt_mem_used);
+	altScanner  as (.clk, .reset, .scan_status, .rdy_flush, .start_scan_out,
+				    .goto_stby_out, .mem_used, .start_scan_in, .goto_stby_in, .flush,
+				    .alt_mem_used);
 endmodule
 
