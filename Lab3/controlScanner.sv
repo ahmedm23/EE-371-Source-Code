@@ -17,17 +17,18 @@ module controlScanner(clk, reset, hex_state_s1, hex_count_s1, hex_state_s2, hex_
 	stateToHex s2 (.state(state_s2), .hex_state);
 	
 	logic scan_status, 
-		  start_scan_out, 
+		  start_scan_out,
+		  goto_stby_out,		  
 		  start_scan_in, 
-		  goto_stby_in, 
-		  goto_stby_out;
+		  goto_stby_in; 
 		  
     logic [7:0] alt_mem_used;
 	primScanner ps (.clk, .reset, .scan_status, .rdy_flush, .start_scan_out,
-					.goto_stby_out, .mem_used, .start_scan_in, .goto_stby_in, .flush,
-					.alt_mem_used);
+					.goto_stby_out(goto_stby_in), .mem_used(mem_used_s1), .state(state_s1), 
+					.start_scan_in(start_scan_out), .goto_stby_in, .flush, .alt_mem_used(mem_used_s2));
+					
 	altScanner  as (.clk, .reset, .scan_status, .rdy_flush, .start_scan_out,
-				    .goto_stby_out, .mem_used, .start_scan_in, .goto_stby_in, .flush,
-				    .alt_mem_used);
+				    .goto_stby_out(goto_stby_in), .mem_used(mem_used_s2), .state(state_s2), 
+					.start_scan_in(start_scan_out), .goto_stby_in, .flush, .alt_mem_used(mem_used_s1));
 endmodule
 
