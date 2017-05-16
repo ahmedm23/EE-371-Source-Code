@@ -103,7 +103,7 @@ module altScanner (clk, reset, rdy_xfer2, start_scan_out2, goto_stby_out2,
       start_scan_out2 = ps == scanning & mem_used2 > 8'd89;
 
       scan      = ps == scanning;
-      flush_mem = ps == flushing;
+      flush_mem = ps == xferring | ps == flushing;
 
       state2 = ps;
    end
