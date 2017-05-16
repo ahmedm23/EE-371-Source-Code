@@ -27,11 +27,11 @@ module controlScanner(clk, reset, hex_state1, hex_count1, hex_state2, hex_count2
    assign rdy_flush = rdy_flush1 || rdy_flush2;	
 		  
 	primScanner ps (.clk, .reset, 
-						 .rdy_flush(rdy_flush1), 
-						 .start_scan_out(start_scan_out1),
-					    .goto_stby_out(goto_stby_out1), 
-						 .mem_used(mem_used1), 
-						 .state(state1), 
+						 .rdy_flush1, 
+						 .start_scan_out1,
+					    .goto_stby_out1, 
+						 .mem_used1, 
+						 .state1, 
 						 .start_scan_in(start_scan_out2), 
 						 .goto_stby_in(goto_stby_out2), 
 						 .flush, 
@@ -39,15 +39,16 @@ module controlScanner(clk, reset, hex_state1, hex_count1, hex_state2, hex_count2
 						 );
 					
 	altScanner as (.clk, .reset, 
-						.rdy_flush(rdy_flush2), 
-						.start_scan_out(start_scan_out2),
-						.goto_stby_out(goto_stby_out2), 
-						.mem_used(mem_used2), 
-						.state(state2), 
+						.rdy_flush2, 
+						.start_scan_out2,
+						.goto_stby_out2, 
+						.mem_used2, 
+						.state2, 
 						.start_scan_in(start_scan_out1), 
 						.goto_stby_in(goto_stby_out1), 
 						.flush, 
-						.alt_mem_used(mem_used1));
+						.alt_mem_used(mem_used1)
+						);
    /*					
    logic scan_status, 
 		  start_scan_out,
