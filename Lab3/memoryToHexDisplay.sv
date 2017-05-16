@@ -18,7 +18,7 @@ module memoryToHexDisplay(hex_count, mem_used);
 			8'b00000111: hex_count = ~7'b0000111; // 7
 			8'b00001000: hex_count = ~7'b1111111; // 8
 			8'b00001001: hex_count = ~7'b1101111; // 9
-			8'b00001010: hex_count = ~7'b0001000; // 10
+			8'b00001010: hex_count = ~7'b1000000; // -
 			default: hex_count = ~7'bX;
 		endcase
 endmodule
