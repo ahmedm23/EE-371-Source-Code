@@ -7,7 +7,7 @@ module memory (clk, reset, mem_used, scan, flush);
    always_ff @ (posedge clk)
       if (reset)                         mem_used <= 8'd0;
       else if (scan & mem_used < 8'd100) mem_used <= mem_used + 8'd1;
-      else if (flush & mem_used > 8'd2)  mem_used <= mem_used - 8'd3;
+      else if (flush & mem_used > 8'd3)  mem_used <= mem_used - 8'd4;
       else if (flush & mem_used > 8'd0)  mem_used <= mem_used - 8'd1;
       else                               mem_used <= mem_used;
 

@@ -1,13 +1,13 @@
 
 // Same behavior as altScanner but resets to scanning mode
 module primScanner (clk, reset, rdy_flush1, start_scan_out1, goto_stby_out1,
-                    mem_used1, state1, start_scan_in, goto_stby_in, flush,
+                    mem_used1, state1, start_scan_in, goto_stby_in, xfer,
                     alt_mem_used);
    input  logic       clk, reset;
    output logic       rdy_flush1, start_scan_out1, goto_stby_out1;
    output logic [7:0] mem_used1;
    output logic [2:0] state1;
-   input  logic       start_scan_in, goto_stby_in, flush;
+   input  logic       start_scan_in, goto_stby_in, xfer;
    input  logic [7:0] alt_mem_used;
    logic              scan, flush_mem;
    logic        [2:0] ps, ns;
@@ -24,28 +24,30 @@ module primScanner (clk, reset, rdy_flush1, start_scan_out1, goto_stby_out1,
 
    always_comb begin
       case (ps)
-         scanning: if (mem_used1 < 8'd80)            ns = scanning;
-                   else if (mem_used1 == 8'd100)     ns = idle;
-                   else // Buffer between 80 and 100
-                      if (flush)                     ns = flushing;
-                      else                           ns = scanning;
-         flushing: if (mem_used1 > 8'd0)             ns = flushing;
-                   else                              ns = low_pwr;
-         low_pwr:  if (goto_stby_in | flush)         ns = stby;
-                   else                              ns = low_pwr;
-         stby:     if (start_scan_in | flush)        ns = scanning;
-                   else                              ns = stby;
-         idle:     if (flush | alt_mem_used > 8'd49) ns = flushing;
-                   else                              ns = idle;
-         default:                                    ns = low_pwr;
+         scanning: if (mem_used1 < 8'd100)   ns = scanning;
+                   else begin
+                      if (xfer)              ns = xferring;
+                      else                   ns = idle;
+                   end
+         xferring: if (mem_used1 > 8'd0)     ns = xferring;
+                   else                      ns = low_pwr;
+         flushing: if (mem_used1 > 8'd0)     ns = flushing;
+                   else                      ns = low_pwr;
+         low_pwr:  if (goto_stby_in)         ns = stby;
+                   else                      ns = low_pwr;
+         stby:     if (start_scan_in)        ns = scanning;
+                   else                      ns = stby;
+         idle:     if (alt_mem_used > 8'd49) ns = flushing;
+                   else                      ns = idle;
+         default:                            ns = low_pwr;
       endcase
 
-      rdy_flush1      = (ps == scanning | ps == idle ) & mem_used1 > 8'd79;
+      rdy_flush1      = mem_used1 > 8'd79;
       goto_stby_out1  = rdy_flush1 & mem_used1 > 8'd79;
       start_scan_out1 = ps == scanning & mem_used1 > 8'd89;
 
       scan      = ps == scanning;
-      flush_mem = ps == flushing;
+      flush_mem = ps == xferring | ps == flushing;
 
       state1 = ps;
    end
@@ -82,23 +84,25 @@ module altScanner (clk, reset, rdy_flush2, start_scan_out2, goto_stby_out2,
 
    always_comb begin
       case (ps)
-         scanning: if (mem_used2 < 8'd80)            ns = scanning;
-                   else if (mem_used2 == 8'd100)     ns = idle;
-                   else // Buffer between 80 and 100
-                      if (flush)                     ns = flushing;
-                      else                           ns = scanning;
-         flushing: if (mem_used2 > 8'd0)             ns = flushing;
-                   else                              ns = low_pwr;
-         low_pwr:  if (goto_stby_in)                 ns = stby;
-                   else                              ns = low_pwr;
-         stby:     if (start_scan_in)                ns = scanning;
-                   else                              ns = stby;
-         idle:     if (flush | alt_mem_used > 8'd49) ns = flushing;
-                   else                              ns = idle;
-         default:                                    ns = low_pwr;
+         scanning: if (mem_used2 < 8'd100)   ns = scanning;
+                   else begin
+                      if (xfer)              ns = xferring;
+                      else                   ns = idle;
+                   end
+         xferring: if (mem_used2 > 8'd0)     ns = xferring;
+                   else                      ns = low_pwr;
+         flushing: if (mem_used2 > 8'd0)     ns = flushing;
+                   else                      ns = low_pwr;
+         low_pwr:  if (goto_stby_in)         ns = stby;
+                   else                      ns = low_pwr;
+         stby:     if (start_scan_in)        ns = scanning;
+                   else                      ns = stby;
+         idle:     if (alt_mem_used > 8'd49) ns = flushing;
+                   else                      ns = idle;
+         default:                            ns = low_pwr;
       endcase
 
-      rdy_flush2      = (ps == scanning | ps == idle) & mem_used2 > 8'd79;
+      rdy_flush2      = mem_used2 > 8'd79;
       goto_stby_out2  = rdy_flush2 & mem_used2 > 8'd79;
       start_scan_out2 = ps == scanning & mem_used2 > 8'd89;
 
