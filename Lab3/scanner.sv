@@ -56,11 +56,11 @@ module primScanner (clk, reset, rdy_flush, start_scan_out,
 endmodule
 
 // Same behavior as primScanner except resets to low power mode
-module altScanner (clk, reset, scan_status, rdy_flush, start_scan_out,
+module altScanner (clk, reset, rdy_flush, start_scan_out,
                    goto_stby_out, mem_used, state, start_scan_in, goto_stby_in,
                    flush, alt_mem_used);
    input  logic       clk, reset;
-   output logic       scan_status, rdy_flush, start_scan_out, goto_stby_out;
+   output logic       rdy_flush, start_scan_out, goto_stby_out;
    output logic [7:0] mem_used;
    output logic [2:0] state;
    input  logic       start_scan_in, goto_stby_in, flush;
