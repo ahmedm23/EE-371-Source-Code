@@ -75,7 +75,7 @@ module altScanner (clk, reset, rdy_flush2, start_scan_out2, goto_stby_out2,
    stby     = 3'b001,
    scanning = 3'b010,
    idle     = 3'b011,
-   flushing = 3'b100;
+   flushing = 3'b100,
    xferring = 3'b101;
 
    memory mem (.clk, .reset, .mem_used(mem_used2), .scan, .flush(flush_mem));
