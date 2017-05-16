@@ -1,11 +1,11 @@
 
-module primScanner (clk, reset, rdy_flush, start_scan_out,
-                    goto_stby_out, mem_used, state, start_scan_in, goto_stby_in,
-                    flush, alt_mem_used);
+module primScanner (clk, reset, rdy_flush1, start_scan_out1, goto_stby_out1,
+                    mem_used1, state1, start_scan_in, goto_stby_in, flush,
+                    alt_mem_used);
    input  logic       clk, reset;
-   output logic       rdy_flush, start_scan_out, goto_stby_out;
-   output logic [7:0] mem_used;
-   output logic [2:0] state;
+   output logic       rdy_flush1, start_scan_out1, goto_stby_out1;
+   output logic [7:0] mem_used1;
+   output logic [2:0] state1;
    input  logic       start_scan_in, goto_stby_in, flush;
    input  logic [7:0] alt_mem_used;
    logic              scan, flush_mem;
@@ -18,16 +18,16 @@ module primScanner (clk, reset, rdy_flush, start_scan_out,
    idle     = 3'b011,
    flushing = 3'b100;
 
-   memory mem (.clk, .reset, .mem_used, .scan, .flush(flush_mem));
+   memory mem (.clk, .reset, .mem_used(mem_used1), .scan, .flush(flush_mem));
 
    always_comb begin
       case (ps)
-         scanning: if (mem_used < 8'd80)                ns = scanning;
-                   else if (mem_used == 8'd100)         ns = idle;
+         scanning: if (mem_used1 < 8'd80)               ns = scanning;
+                   else if (mem_used1 == 8'd100)        ns = idle;
                    else // Buffer between 80 and 100
                       if (flush)                        ns = flushing;
                       else                              ns = scanning;
-         flushing: if (mem_used > 8'd0)                 ns = flushing;
+         flushing: if (mem_used1 > 8'd0)                ns = flushing;
                    else                                 ns = low_pwr;
          low_pwr:  if (goto_stby_in)                    ns = stby;
                    else                                 ns = low_pwr;
@@ -38,14 +38,14 @@ module primScanner (clk, reset, rdy_flush, start_scan_out,
          default:                                       ns = low_pwr;
       endcase
 
-      rdy_flush      = ps == scanning & mem_used > 8'd79;
-      goto_stby_out  = rdy_flush & mem_used > 8'd89;
-      start_scan_out = ps == scanning & mem_used > 8'd89;
+      rdy_flush      = ps == scanning & mem_used1 > 8'd79;
+      goto_stby_out  = rdy_flush & mem_used1 > 8'd79;
+      start_scan_out = ps == scanning & mem_used1 > 8'd89;
 
       scan      = ps == scanning;
       flush_mem = ps == flushing;
 
-      state = ps;
+      state1 = ps;
    end
 
    always_ff @ (posedge clk)
@@ -56,13 +56,13 @@ module primScanner (clk, reset, rdy_flush, start_scan_out,
 endmodule
 
 // Same behavior as primScanner except resets to low power mode
-module altScanner (clk, reset, rdy_flush, start_scan_out,
-                   goto_stby_out, mem_used, state, start_scan_in, goto_stby_in,
-                   flush, alt_mem_used);
+module altScanner (clk, reset, rdy_flush2, start_scan_out2, goto_stby_out2,
+                   mem_used2, state2, start_scan_in, goto_stby_in, flush,
+                   alt_mem_used);
    input  logic       clk, reset;
-   output logic       rdy_flush, start_scan_out, goto_stby_out;
-   output logic [7:0] mem_used;
-   output logic [2:0] state;
+   output logic       rdy_flush2, start_scan_out2, goto_stby_out2;
+   output logic [7:0] mem_used2;
+   output logic [2:0] state2;
    input  logic       start_scan_in, goto_stby_in, flush;
    input  logic [7:0] alt_mem_used;
    logic              scan, flush_mem;
@@ -75,16 +75,16 @@ module altScanner (clk, reset, rdy_flush, start_scan_out,
    idle     = 3'b011,
    flushing = 3'b100;
 
-   memory mem (.clk, .reset, .mem_used, .scan, .flush(flush_mem));
+   memory mem (.clk, .reset, .mem_used(mem_used2), .scan, .flush(flush_mem));
 
    always_comb begin
       case (ps)
-         scanning: if (mem_used < 8'd80)                ns = scanning;
-                   else if (mem_used == 8'd100)         ns = idle;
+         scanning: if (mem_used2 < 8'd80)               ns = scanning;
+                   else if (mem_used2 == 8'd100)        ns = idle;
                    else // Buffer between 80 and 100
                       if (flush)                        ns = flushing;
                       else                              ns = scanning;
-         flushing: if (mem_used > 8'd0)                 ns = flushing;
+         flushing: if (mem_used2 > 8'd0)                ns = flushing;
                    else                                 ns = low_pwr;
          low_pwr:  if (goto_stby_in)                    ns = stby;
                    else                                 ns = low_pwr;
@@ -95,14 +95,14 @@ module altScanner (clk, reset, rdy_flush, start_scan_out,
          default:                                       ns = low_pwr;
       endcase
 
-      rdy_flush      = ps == scanning & mem_used > 8'd79;
-      goto_stby_out  = rdy_flush & mem_used > 8'd89;
-      start_scan_out = ps == scanning & mem_used > 8'd89;
+      rdy_flush      = ps == scanning & mem_used2 > 8'd79;
+      goto_stby_out  = rdy_flush & mem_used2 > 8'd79;
+      start_scan_out = ps == scanning & mem_used2 > 8'd89;
 
       scan      = ps == scanning;
       flush_mem = ps == flushing;
 
-      state = ps;
+      state2 = ps;
    end
 
    always_ff @ (posedge clk)
