@@ -41,7 +41,7 @@ module primScanner (clk, reset, rdy_flush1, start_scan_out1, goto_stby_out1,
       endcase
 
       rdy_flush1      = (ps == scanning | ps == idle ) & mem_used1 > 8'd79;
-      goto_stby_out1  = rdy_flush & mem_used1 > 8'd79;
+      goto_stby_out1  = rdy_flush1 & mem_used1 > 8'd79;
       start_scan_out1 = ps == scanning & mem_used1 > 8'd89;
 
       scan      = ps == scanning;
@@ -99,7 +99,7 @@ module altScanner (clk, reset, rdy_flush2, start_scan_out2, goto_stby_out2,
       endcase
 
       rdy_flush2      = (ps == scanning | ps == idle) & mem_used2 > 8'd79;
-      goto_stby_out2  = rdy_flush & mem_used2 > 8'd79;
+      goto_stby_out2  = rdy_flush2 & mem_used2 > 8'd79;
       start_scan_out2 = ps == scanning & mem_used2 > 8'd89;
 
       scan      = ps == scanning;
