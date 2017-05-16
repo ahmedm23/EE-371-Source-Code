@@ -1,9 +1,9 @@
 
-module primScanner (clk, reset, scan_status, rdy_flush, start_scan_out,
+module primScanner (clk, reset, rdy_flush, start_scan_out,
                     goto_stby_out, mem_used, state, start_scan_in, goto_stby_in,
                     flush, alt_mem_used);
    input  logic       clk, reset;
-   output logic       scan_status, rdy_flush, start_scan_out, goto_stby_out;
+   output logic       rdy_flush, start_scan_out, goto_stby_out;
    output logic [7:0] mem_used;
    output logic [2:0] state;
    input  logic       start_scan_in, goto_stby_in, flush;
@@ -12,10 +12,10 @@ module primScanner (clk, reset, scan_status, rdy_flush, start_scan_out,
    logic        [2:0] ps, ns;
 
    parameter
-   low_pwr  = 3'b000;
-   stby     = 3'b001;
-   scanning = 3'b010;
-   idle     = 3'b011;
+   low_pwr  = 3'b000,
+   stby     = 3'b001,
+   scanning = 3'b010,
+   idle     = 3'b011,
    flushing = 3'b100;
 
    memory mem (.clk, .reset, .mem_used, .scan, .flush(flush_mem));
@@ -69,10 +69,10 @@ module altScanner (clk, reset, scan_status, rdy_flush, start_scan_out,
    logic        [2:0] ps, ns;
 
    parameter
-   low_pwr  = 3'b000;
-   stby     = 3'b001;
-   scanning = 3'b010;
-   idle     = 3'b011;
+   low_pwr  = 3'b000,
+   stby     = 3'b001,
+   scanning = 3'b010,
+   idle     = 3'b011,
    flushing = 3'b100;
 
    memory mem (.clk, .reset, .mem_used, .scan, .flush(flush_mem));
