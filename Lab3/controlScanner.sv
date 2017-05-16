@@ -4,7 +4,7 @@ module controlScanner(clk, reset, hex_state_s1, hex_count_s1, hex_state_s2, hex_
 	input logic clk, reset, flush;  
 	
     logic [7:0] mem_used_s1, mem_used_s2;
-	logic [3:0] state_s1, state_s2;
+	logic [2:0] state_s1, state_s2;
 	
 	// inputs current memory output from primScanner and altScanner
 	// outputs respective count HEX LEDs	
