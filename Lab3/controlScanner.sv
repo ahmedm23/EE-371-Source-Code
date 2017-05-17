@@ -1,7 +1,7 @@
-module controlScanner(clk, reset, hex_state1, hex_count1, hex_state2, hex_count2, rdy_flush, flush); 
+module controlScanner(clk, reset, hex_state1, hex_count1, hex_state2, hex_count2, rdy_xfer, xfer); 
 	output logic [6:0] hex_state1, hex_count1, hex_state2, hex_count2;
-	output logic rdy_flush;
-	input logic clk, reset, flush;  
+	output logic rdy_xfer;
+	input logic clk, reset, xfer;  
 	
    logic [7:0] mem_used1, mem_used2;
 	logic [2:0] state1, state2;
@@ -20,51 +20,38 @@ module controlScanner(clk, reset, hex_state1, hex_count1, hex_state2, hex_count2
 			start_scan_out2,
 		   goto_stby_out1,
          goto_stby_out2,
-		   rdy_flush1,
-		   rdy_flush2;
+		   rdy_xfer1,
+		   rdy_xfer2;
 	
-	// temporarily fixes the fan out issue with rdy_flush, cannot be assigned more than one value
-   assign rdy_flush = rdy_flush1 || rdy_flush2;	
-		  
+	// turns on rdy_xfer light if either scanner reaches 80% buffered
+   assign rdy_xfer = rdy_xfer1 || rdy_xfer2;	
+	
+	// instantiates first scanner
 	primScanner ps (.clk, .reset, 
-						 .rdy_flush1, 
+						 .rdy_xfer1, 
 						 .start_scan_out1,
 					    .goto_stby_out1, 
 						 .mem_used1, 
 						 .state1, 
 						 .start_scan_in(start_scan_out2), 
 						 .goto_stby_in(goto_stby_out2), 
-						 .flush, 
+						 .xfer, 
 						 .alt_mem_used(mem_used2)
 						 );
-					
+	
+	// instantiates second scanner	
 	altScanner as (.clk, .reset, 
-						.rdy_flush2, 
+						.rdy_xfer2, 
 						.start_scan_out2,
 						.goto_stby_out2, 
 						.mem_used2, 
 						.state2, 
 						.start_scan_in(start_scan_out1), 
 						.goto_stby_in(goto_stby_out1), 
-						.flush, 
+						.xfer, 
 						.alt_mem_used(mem_used1)
 						);
-   /*					
-   logic scan_status, 
-		  start_scan_out,
-		  goto_stby_out,		  
-		  start_scan_in, 
-		  goto_stby_in; 
-		  
-   logic [7:0] alt_mem_used;
-	primScanner ps (.clk, .reset, .scan_status, .rdy_flush, .start_scan_out,
-					.goto_stby_out(goto_stby_in), .mem_used(mem_used1), .state(state1), 
-					.start_scan_in(start_scan_out), .goto_stby_in, .flush, .alt_mem_used(mem_used2));
-					
-	altScanner  as (.clk, .reset, .scan_status, .rdy_flush, .start_scan_out,
-				    .goto_stby_out(goto_stby_in), .mem_used(mem_used2), .state(state2), 
-					.start_scan_in(start_scan_out), .goto_stby_in, .flush, .alt_mem_used(mem_used1));
-	*/				
+		
 endmodule
 
 

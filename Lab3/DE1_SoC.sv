@@ -11,6 +11,8 @@ module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, SW);
 	// tBase[2] == 12.5MHz
 	reg [25:0] tBase;
 	always@(posedge CLOCK_50) tBase <= tBase + 1'b1;
+	
+	// turn off HEX2 and HEX3
 	assign HEX2 = 7'b1111111;
 	assign HEX3 = 7'b1111111;	
 	
@@ -24,13 +26,13 @@ module DE1_SoC (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, SW);
 	rdy_flush						LEDR[9]
 	flush 							SW[9]
 	
-	The hex_states display what state each scanner is in, 
-	and the hex_count displays the percentage of the buffer for each scanner
-	rdy_flush indicates whether either scanner reaches 80% buffered
+	*The hex_states display what state each scanner is in, 
+	*and the hex_count displays the percentage of the buffer for each scanner
+	*rdy_xfr indicates whether either scanner reaches 80% buffered
 	*/
-	controlScanner cs (.clk(tBase[22]), .reset(~KEY[0]), .hex_state1(HEX5), 
+	controlScanner cs (.clk(tBase[21]), .reset(~KEY[0]), .hex_state1(HEX5), 
 					   .hex_count1(HEX4), .hex_state2(HEX1), .hex_count2(HEX0), 
-					   .rdy_flush(LEDR[9]), .flush(SW[9]));
+					   .rdy_xfer(LEDR[9]), .xfer(SW[9]));
 endmodule
 
 
