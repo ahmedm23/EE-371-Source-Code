@@ -116,7 +116,37 @@ module altScanner (clk, reset, rdy_xfer2, start_scan_out2, goto_stby_out2,
 endmodule
 
 module primScanner_testbench ();
-   
+   logic       clk, reset;
+
+   // Outputs
+   logic       rdy_xfer1, start_scan_out1, goto_stby_out1;
+   logic [7:0] mem_used1;
+   logic [2:0] state1;
+
+   // Inputs
+   logic       start_scan_in, goto_stby_in, xfer;
+   logic [7:0] alt_mem_used;
+
+   primScanner dut (.clk, .reset, .rdy_xfer1, .start_scan_out1, .goto_stby_out1,
+                    .mem_used1, .state1, .start_scan_in, .goto_stby_in, .xfer,
+                    .alt_mem_used);
+
+   parameter CLOCK_PERIOD = 100;
+   initial begin
+      clk <= 0;
+      forever #(CLOCK_PERIOD/2) clk <= ~clk;
+   end
+
+   integer i;
+   initial begin
+                                                         @(posedge clk);
+      reset <= 1; xfer <= 0;                             @(posedge clk);
+      reset <= 0;                                        @(posedge clk);
+                  xfer <= 1;                             @(posedge clk);
+      for (i = 0; i < 108; i++)                          @(posedge clk);
+      for (i = 0; i < 30; i++)                           @(posedge clk);
+      $stop;      
+   end
 endmodule
 
 module altScanner_testbench ();
@@ -131,6 +161,10 @@ module altScanner_testbench ();
    logic       start_scan_in, goto_stby_in, xfer;
    logic [7:0] alt_mem_used;
 
+   altScanner dut (.clk, .reset, .rdy_xfer2, .start_scan_out2, .goto_stby_out2,
+                   .mem_used2, .state2, .start_scan_in, .goto_stby_in, .xfer,
+                   .alt_mem_used);
+
    parameter CLOCK_PERIOD = 100;
    initial begin
       clk <= 0;
@@ -140,14 +174,18 @@ module altScanner_testbench ();
    integer i;
    initial begin
                                                          @(posedge clk);
-      reset <= 1;                                        @(posedge clk);
+      reset <= 1; goto_stby_in <= 0; start_scan_in <= 0; xfer <= 0;
+                                                         @(posedge clk);
       reset <= 0;                                        @(posedge clk);
                   goto_stby_in <= 1;                     @(posedge clk);
                   goto_stby_in <= 0;                     @(posedge clk);
                                      start_scan_in <= 1; @(posedge clk);
                                      start_scan_in <= 0; @(posedge clk);
       for (i = 0; i < 108; i++)                          @(posedge clk);
-
+      xfer <= 1;                                         @(posedge clk);
+      xfer <= 0;                                         @(posedge clk);
+      for (i = 0; i < 30; i++)                           @(posedge clk);
+      $stop;
    end
 endmodule
 
