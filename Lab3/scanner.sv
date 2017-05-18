@@ -41,7 +41,7 @@ module primScanner (clk, reset, rdy_xfer1, start_scan_out1, goto_stby_out1,
       endcase
 
       rdy_xfer1       = mem_used1 > 8'd79;
-      goto_stby_out1  = rdy_xfer1 & mem_used1 > 8'd79;
+      goto_stby_out1  = rdy_xfer1;
       start_scan_out1 = ps == scanning & mem_used1 > 8'd89;
 
       scan      = ps == scanning;
@@ -99,7 +99,7 @@ module altScanner (clk, reset, rdy_xfer2, start_scan_out2, goto_stby_out2,
       endcase
 
       rdy_xfer2       = mem_used2 > 8'd79;
-      goto_stby_out2  = rdy_xfer2 & mem_used2 > 8'd79;
+      goto_stby_out2  = rdy_xfer2;
       start_scan_out2 = ps == scanning & mem_used2 > 8'd89;
 
       scan      = ps == scanning;
@@ -113,5 +113,41 @@ module altScanner (clk, reset, rdy_xfer2, start_scan_out2, goto_stby_out2,
          ps <= low_pwr;
       else
          ps <= ns;
+endmodule
+
+module primScanner_testbench ();
+   
+endmodule
+
+module altScanner_testbench ();
+   logic       clk, reset;
+
+   // Outputs
+   logic       rdy_xfer2, start_scan_out2, goto_stby_out2;
+   logic [7:0] mem_used2;
+   logic [2:0] state2;
+
+   // Inputs
+   logic       start_scan_in, goto_stby_in, xfer;
+   logic [7:0] alt_mem_used;
+
+   parameter CLOCK_PERIOD = 100;
+   initial begin
+      clk <= 0;
+      forever #(CLOCK_PERIOD/2) clk <= ~clk;
+   end
+
+   integer i;
+   initial begin
+                                                         @(posedge clk);
+      reset <= 1;                                        @(posedge clk);
+      reset <= 0;                                        @(posedge clk);
+                  goto_stby_in <= 1;                     @(posedge clk);
+                  goto_stby_in <= 0;                     @(posedge clk);
+                                     start_scan_in <= 1; @(posedge clk);
+                                     start_scan_in <= 0; @(posedge clk);
+      for (i = 0; i < 108; i++)                          @(posedge clk);
+
+   end
 endmodule
 
