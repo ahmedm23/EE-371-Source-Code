@@ -4,6 +4,6 @@
 
 void main() {
    while (1) {
-      *leds = switches;
+      *leds = *switches;
    }
 }
