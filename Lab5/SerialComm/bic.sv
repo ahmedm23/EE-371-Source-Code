@@ -25,21 +25,25 @@ module bic_testbench ();
    end
 
    initial begin
-                  @(posedge sr_clk);
-      enable <= 0 @(posedge sr_clk);
-      enable <= 1 @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
-                  @(posedge sr_clk);
+                   @(posedge sr_clk);
+      enable <= 0; @(posedge sr_clk);
+      enable <= 1; @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+      enable <= 0; @(posedge sr_clk);
+                   @(posedge sr_clk);
+                   @(posedge sr_clk);
+      $stop;
    end
 endmodule
 
