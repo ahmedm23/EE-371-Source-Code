@@ -9,6 +9,6 @@ module SIPO_SR (sr_clk, reset, data_out, data_in);
 
    always_ff @ (posedge sr_clk or posedge reset)
       if (reset) buf <= 10'b00_0000_0000;
-      else       buf <= {data_in, buf[9:1]};
+      else       buf <= {data_in, buf[9:1]}; // Shift in least signif bit first
 endmodule
 
