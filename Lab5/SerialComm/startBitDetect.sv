@@ -19,6 +19,7 @@ module startBitDetect_testbench ();
       data <= 0;                     #90;
       data <= 1;                     #30;
                  char_received <= 1; #10;
+      $stop;
    end
 endmodule
 
