@@ -1,4 +1,4 @@
-/
+
 module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    input  logic        CLOCK_50;
    output logic [7:0]  LEDR;
@@ -41,7 +41,7 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
 
    nios_system niosii (.clk_clk                 (CLOCK_50),
                        .leds_export             (LEDR[7:0]),
-                       .reset_reset_n            (KEY[0]),
+                       .reset_reset_n           (KEY[0]),
                        .data_out_export         (data_out),
                        .data_in_export          (data_in),
                        .tx_enable_export        (tx_enable),
