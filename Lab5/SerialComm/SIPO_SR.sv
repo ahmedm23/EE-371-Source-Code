@@ -11,3 +11,4 @@ module SIPO_SR (sr_clk, reset, data_out, data_in);
       if (reset) buf <= 10'b00_0000_0000;
       else       buf <= {data_in, buf[9:1]};
 endmodule
+
