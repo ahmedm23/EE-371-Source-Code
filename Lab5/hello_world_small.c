@@ -79,33 +79,13 @@
  */
 
 #include "sys/alt_stdio.h"
-#include "altera_avalon_pio_regs.h"
-#include "system.h"
 
 int main()
 { 
-
-  alt_putstr("Hello from Nios II! Complement \n");
+  alt_putstr("Hello from Nios II!\n");
 
   /* Event loop never exits. */
-  while (1) {
+  while (1);
 
-	  char switches = IORD_ALTERA_AVALON_PIO_DATA(SWITCHES_BASE);
-	  char leds;
-
-	  if (switches & 0x08) {
-		  leds = ~switches;
-	  } else {
-		  leds = switches;
-	  }
-
-/*	  if(switches % 2 != 0) {
-		  leds = ~switches;
-	  }else {
-		  leds = switches;
-	  }
-*/
-	  IOWR_ALTERA_AVALON_PIO_DATA(LEDS_BASE, leds);
-  }
   return 0;
 }
