@@ -24,8 +24,7 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
 
    bic BIC_Rx (.sr_clk(sr_clk_Rx), .enable, .char_complete);
 
-   SIPO_SR sr_Rx (.sr_clk(sr_clk_Rx), .reset, .data_out(somewhere on processor),
-                  .data_in(GPIO_0[0]) // MAKE GPIO, MAKE NIOS DATA INPUT
+   SIPO_SR sr_Rx (.sr_clk(sr_clk_Rx), .reset, .data_out, .data_in(GPIO_0[0])); 
 
    // Transmitter modules
    logic tx_enable;
