@@ -1,11 +1,11 @@
 
-module bic (sr_clk, enable, data_complete);
-   output logic data_complete;
+module bic (sr_clk, enable, char_complete);
+   output logic char_complete;
    input  logic sr_clk, enable;
 
-   logic [3:0] count = 4'b0000; // Can do this??
+   logic [3:0] count = 4'b0000;
 
-   assign data_complete = count == 4'b1011;
+   assign char_complete = count == 4'b1011;
 
    always_ff @ (posedge sr_clk)
       if (enable) count <= count + 1'b1;
@@ -13,10 +13,10 @@ module bic (sr_clk, enable, data_complete);
 endmodule
 
 module bic_testbench ();
-   logic data_complete;
+   logic char_complete;
    logic sr_clk, enable;
 
-   bic dut (.sr_clk, .enable, .data_complete);
+   bic dut (.sr_clk, .enable, .char_complete);
 
    parameter CLOCK_PERIOD = 100;
    initial begin

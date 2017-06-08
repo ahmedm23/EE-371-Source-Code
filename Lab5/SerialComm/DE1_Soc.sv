@@ -1,0 +1,44 @@
+
+module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
+   input  logic        CLOCK_50;
+   output logic [7:0]  LEDR;
+   input  logic [3:0]  KEY;
+   inout  logic [35:0] GPIO_0;
+
+   assign reset = ~KEY[0];
+
+   logic clk16x;
+   clock16x clk_maker (.CLOCK_50, .clk16x); // clk16x = 16x 9600 Bps clk signal
+
+   logic [7:0] data_in; // Data entering Nios II
+   logic [7:0] data_out; // Data leaving Nios II
+   
+
+   // Receiver modules
+   logic enable;
+   logic char_complete;
+   startBitDetect sbd (.enable, .data(GPIO_0[0]), .char_complete);
+
+   logic sr_clk_Rx;
+   bsc BSC_Rx (.sr_clk(sr_clk_Rx), .clk16x, .enable); // Generate sr_clk for Rx
+
+   bic BIC_Rx (.sr_clk(sr_clk_Rx), .enable, .char_complete);
+
+   SIPO_SR sr_Rx (.sr_clk(sr_clk_Rx), .reset, .data_out(somewhere on processor),
+                  .data_in(GPIO_0[0]) // MAKE GPIO, MAKE NIOS DATA INPUT
+
+   // Transmitter modules
+   logic tx_enable;
+   logic sr_clk_Tx;
+   bsc BSC_Tx (.sr_clk(sr_clk_Tx), .clk16x, .enable(tx_enable));
+
+   logic char_complete_tx;
+   bic BIC_Tx (.sr_clk(sr_clk_Tx), .enable(tx_enable),
+               .char_complete(char_complete_tx));
+
+   PISO_SR sr_Tx (.sr_clk, .reset, .data_out(GPIO_0[1]), .data_in(data_out),
+                  .load);
+
+   nios_system niosii // INSERT NIOS II instantiation
+endmodule
+
