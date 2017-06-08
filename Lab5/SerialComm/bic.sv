@@ -1,7 +1,7 @@
 
-module BIC (sr_clk, enable, data_complete);
-   input  logic sr_clk, enable;
+module bic (sr_clk, enable, data_complete);
    output logic data_complete;
+   input  logic sr_clk, enable;
 
    logic [3:0] count = 4'b0000; // Can do this??
 
@@ -10,5 +10,36 @@ module BIC (sr_clk, enable, data_complete);
    always_ff @ (posedge sr_clk)
       if (enable) count <= count + 1'b1;
       else        count <= 4'b0000;
+endmodule
+
+module bic_testbench ();
+   logic data_complete;
+   logic sr_clk, enable;
+
+   bic dut (.sr_clk, .enable, .data_complete);
+
+   parameter CLOCK_PERIOD = 100;
+   initial begin
+      sr_clk <= 0;
+      forever #(CLOCK_PERIOD / 2) sr_clk <= ~sr_clk;
+   end
+
+   initial begin
+                  @(posedge sr_clk);
+      enable <= 0 @(posedge sr_clk);
+      enable <= 1 @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+                  @(posedge sr_clk);
+   end
 endmodule
 

@@ -1,5 +1,5 @@
 
-module BSC (sr_clk, clk16x, enable);
+module bsc (sr_clk, clk16x, enable);
    input  logic clk16x, enable;
    output logic sr_clk;
 
