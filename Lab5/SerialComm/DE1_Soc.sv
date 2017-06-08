@@ -1,4 +1,4 @@
-
+/
 module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    input  logic        CLOCK_50;
    output logic [7:0]  LEDR;
@@ -39,6 +39,13 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    PISO_SR sr_Tx (.sr_clk, .reset, .data_out(GPIO_0[1]), .data_in(data_out),
                   .load);
 
-   nios_system niosii // INSERT NIOS II instantiation
+   nios_system niosii (.clk_clk                 (CLOCK_50),
+                       .leds_export             (LEDR[7:0]),
+                       .reset_reset_n            (KEY[0]),
+                       .data_out_export         (data_out),
+                       .data_in_export          (data_in),
+                       .tx_enable_export        (tx_enable),
+                       .char_complete_tx_export (char_complete_tx),
+                       .load_export             (load));
 endmodule
 
