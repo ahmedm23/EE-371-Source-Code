@@ -5,6 +5,7 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    input  logic [3:0]  KEY;
    inout  logic [35:0] GPIO_0;
 
+   logic reset;
    assign reset = ~KEY[0];
 
    logic clk16x;
@@ -35,8 +36,9 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    bic BIC_Tx (.sr_clk(sr_clk_Tx), .enable(tx_enable),
                .char_complete(char_complete_tx));
 
-   PISO_SR sr_Tx (.sr_clk, .reset, .data_out(GPIO_0[1]), .data_in(data_out),
-                  .load);
+   logic load;
+   PISO_SR sr_Tx (.sr_clk(sr_clk_Tx), .reset, .data_out(GPIO_0[1]),
+                  .data_in(data_out), .load);
 
    nios_system niosii (.clk_clk                 (CLOCK_50),
                        .leds_export             (LEDR[7:0]),
