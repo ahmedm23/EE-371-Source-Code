@@ -52,4 +52,46 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
                        .load_export             (load));
 endmodule
 
+module receiver_testbench ();
+   logic       reset;
+   logic       clk16x;
+   logic       GPIO_0[0];
+   logic [7:0] data_in;
+
+   logic enable;
+   logic data;
+   logic char_complete;
+   startBitDetect sbd (.enable, .data, .char_complete);
+
+   logic sr_clk_Rx;
+   bsc bsc_rx (.sr_clk(sr_clk_Rx), .clk16x, .enable);
+
+   bic bic_rx (.sr_clk(sr_clk_Rx), .enable, .char_complete);
+
+   SIPO_SR sr_rx (.sr_clk(sr_clk_Rx), .reset, .data_out(data_in),
+                  .data_in(GPIO_0[0]));
+
+   parameter CLOCK_PERIOD = 10;
+   initial begin
+      clk16x <= 0;
+      forever #(CLOCK_PERIOD / 2) clk16x <= ~clk16x;
+   end
+
+   initial begin
+                                    @(posedge clk16x);
+      reset <= 1;                   @(posedge clk16x);
+      reset <= 0;                   @(posedge clk16x);
+      GPIO_0[0] <= 1;               @(posedge clk16x);
+      GPIO_0[0] <= 0;               @(posedge clk16x);
+      GPIO_0[0] <= 0;               @(posedge clk16x);
+      GPIO_0[0] <= 1;               @(posedge clk16x);
+      GPIO_0[0] <= 0;               @(posedge clk16x);      
+      GPIO_0[0] <= 0;               @(posedge clk16x);
+      GPIO_0[0] <= 0;               @(posedge clk16x);
+      GPIO_0[0] <= 0;               @(posedge clk16x);
+      GPIO_0[0] <= 1;               @(posedge clk16x);
+      GPIO_0[0] <= 1;               @(posedge clk16x);
+      GPIO_0[0] <= 1;               @(posedge clk16x);
+   end
+endmodule
 
