@@ -55,13 +55,12 @@ endmodule
 module receiver_testbench ();
    logic       reset;
    logic       clk16x;
-   logic       GPIO_0[0];
+   logic       GPIO_00;
    logic [7:0] data_in;
 
    logic enable;
-   logic data;
    logic char_complete;
-   startBitDetect sbd (.enable, .data, .char_complete);
+   startBitDetect sbd (.enable, .data(GPIO_00), .char_complete);
 
    logic sr_clk_Rx;
    bsc bsc_rx (.sr_clk(sr_clk_Rx), .clk16x, .enable);
@@ -69,7 +68,7 @@ module receiver_testbench ();
    bic bic_rx (.sr_clk(sr_clk_Rx), .enable, .char_complete);
 
    SIPO_SR sr_rx (.sr_clk(sr_clk_Rx), .reset, .data_out(data_in),
-                  .data_in(GPIO_0[0]));
+                  .data_in(GPIO_00));
 
    parameter CLOCK_PERIOD = 10;
    initial begin
@@ -78,21 +77,24 @@ module receiver_testbench ();
    end
 
    initial begin
-                                    @(posedge clk16x);
-      reset <= 1;                   @(posedge clk16x);
-      reset <= 0;                   @(posedge clk16x);
-      GPIO_0[0] <= 1;               @(posedge clk16x);
-      GPIO_0[0] <= 0;               @(posedge clk16x);
-      GPIO_0[0] <= 0;               @(posedge clk16x);
-      GPIO_0[0] <= 1;               @(posedge clk16x);
-      GPIO_0[0] <= 0;               @(posedge clk16x);      
-      GPIO_0[0] <= 0;               @(posedge clk16x);
-      GPIO_0[0] <= 0;               @(posedge clk16x);
-      GPIO_0[0] <= 0;               @(posedge clk16x);
-      GPIO_0[0] <= 1;               @(posedge clk16x);
-      GPIO_0[0] <= 1;               @(posedge clk16x);
-      GPIO_0[0] <= 1;               @(posedge clk16x);
+      GPIO_00 <= 1;               @(posedge clk16x);
+      GPIO_00 <= 1;               @(posedge clk16x);
+      GPIO_00 <= 0; /*start bit*/ @(posedge clk16x);
+      GPIO_00 <= 1; /*data LSB*/  @(posedge sr_clk_Rx);
+      GPIO_00 <= 1;               @(posedge sr_clk_Rx);
+      GPIO_00 <= 0;               @(posedge sr_clk_Rx);      
+      GPIO_00 <= 0;               @(posedge sr_clk_Rx);
+      GPIO_00 <= 0;               @(posedge sr_clk_Rx);
+      GPIO_00 <= 0;               @(posedge sr_clk_Rx);
+      GPIO_00 <= 1;               @(posedge sr_clk_Rx);
+      GPIO_00 <= 0; /*data MSB*/  @(posedge sr_clk_Rx);
+      GPIO_00 <= 1; /*stop bit*/  @(posedge sr_clk_Rx);
+                                  @(posedge sr_clk_Rx);
+                                  @(posedge sr_clk_Rx);
       $stop;
    end
 endmodule
 
+module transmitter_testbench ();
+   
+endmodule
