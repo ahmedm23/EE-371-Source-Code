@@ -77,6 +77,9 @@ module receiver_testbench ();
    end
 
    initial begin
+                                  @(posedge clk16x);
+      reset <= 1;                 @(posedge clk16x);
+      reset <= 0;                 @(posedge clk16x);
       GPIO_00 <= 1;               @(posedge clk16x);
       GPIO_00 <= 1;               @(posedge clk16x);
       GPIO_00 <= 0; /*start bit*/ @(posedge clk16x);
@@ -133,6 +136,7 @@ module transmitter_testbench ();
                                                           @(posedge sr_clk_Tx);
                                                           @(posedge sr_clk_Tx);
                                                           @(posedge sr_clk_Tx);
+                                tx_enable <= 0;           @(posedge sr_clk_Tx);
                                                           @(posedge sr_clk_Tx);
       $stop;
    end
