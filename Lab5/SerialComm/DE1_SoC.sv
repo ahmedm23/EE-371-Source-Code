@@ -33,7 +33,6 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    logic sr_clk_Tx;
    bsc BSC_Tx (.sr_clk(sr_clk_Tx), .clk16x, .enable(tx_enable));
 
-   logic char_complete_tx;
    bic BIC_Tx (.sr_clk(sr_clk_Tx), .enable(tx_enable),
                .char_complete(char_complete_tx));
 
@@ -41,8 +40,6 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    PISO_SR sr_Tx (.sr_clk(sr_clk_Tx), .reset, .data_out(GPIO_0[1]),
                   .data_in(data_out), .load);
 
-   always_ff @ (posedge char_complete)
-      char_complete_rx <= 1'b1;
    
    nios_system niosii (.clk_clk                 (CLOCK_50),
                        .leds_export             (LEDR[7:0]),
@@ -51,7 +48,8 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
                        .data_in_export          (data_in),
                        .tx_enable_export        (tx_enable),
                        .char_complete_tx_export (char_complete_tx),
-                       .char_complete_rx_export (char_complete_rx),
+                       .char_complete_export    (char_complete),
                        .load_export             (load));
 endmodule
+
 
