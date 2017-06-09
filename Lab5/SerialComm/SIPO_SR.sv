@@ -3,12 +3,12 @@ module SIPO_SR (sr_clk, reset, data_out, data_in);
    output logic [7:0] data_out;
    input  logic       sr_clk, reset, data_in;
 
-   logic [9:0] buff = 10'b00_0000_0000;
+   logic [9:0] buff = 10'b11_1111_1111;
 
    assign data_out = buff[8:1];
 
    always_ff @ (posedge sr_clk or posedge reset)
-      if (reset) buff <= 10'b00_0000_0000;
+      if (reset) buff <= 10'b11_1111_1111;;
       else       buff <= {data_in, buff[9:1]}; // Shift in least sig bit first
 endmodule
 
