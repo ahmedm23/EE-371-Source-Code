@@ -5,7 +5,7 @@ module bic (sr_clk, enable, char_complete);
 
    logic [3:0] count = 4'b0000;
 
-   assign char_complete = count == 4'b1011;
+   assign char_complete = count == 4'b1010;
 
    always_ff @ (posedge sr_clk)
       if (enable) count <= count + 1'b1;
