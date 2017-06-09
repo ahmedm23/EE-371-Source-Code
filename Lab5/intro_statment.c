@@ -7,7 +7,7 @@ int main() {
 }
 
 void print_intro() {
-	alt_putstr("Welcome to the world famous game, Ahmed Says!\n\n");
+	alt_putstr("Welcome to the world famous game, Ahmed \"Says\"!\n\n");
    alt_putstr("The instructions to this game are simple.\n");
    alt_putstr("1) 4 colors will flash on the screen in a pseudo random order.\n\n");
    alt_putstr("2) When you see a color on the screen you must press the corresponding key\n");
