@@ -8,8 +8,8 @@ module bic (sr_clk, enable, char_complete);
    assign char_complete = count == 4'b1010;
 
    always_ff @ (posedge sr_clk)
-      if (enable) count <= count + 1'b1;
-      else        count <= 4'b0000;
+      if (enable & count < 4'b1010) count <= count + 1'b1;
+      else                          count <= 4'b0000;
 endmodule
 
 module bic_testbench ();
