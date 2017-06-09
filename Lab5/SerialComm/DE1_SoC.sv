@@ -92,6 +92,7 @@ module receiver_testbench ();
       GPIO_0[0] <= 1;               @(posedge clk16x);
       GPIO_0[0] <= 1;               @(posedge clk16x);
       GPIO_0[0] <= 1;               @(posedge clk16x);
+      $stop;
    end
 endmodule
 
