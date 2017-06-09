@@ -55,7 +55,7 @@ int main() {
          alt_putstr("Character has been transmitted\n");
       } else if (choice == 'r') {
          char char_complete_rx =
-              IORD_ALTERA_AVALON_PIO_DATA(CHAR_COMPLETE_RX_BASE);
+              IORD_ALTERA_AVALON_PIO_DATA(CHAR_COMPLETE_BASE);
          if (char_complete_rx == 1) {
     	      char data_in = IORD_ALTERA_AVALON_PIO_DATA(DATA_IN_BASE);
             alt_putstr("Character received: \n");
