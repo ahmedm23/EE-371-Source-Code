@@ -14,43 +14,43 @@ char getParityBit(char);
 
 int main() {
    while (1) {
-      alt_putstr("Enter 's' to send or 'r' to receive a character");
+      alt_putstr("Enter 's' to send or 'r' to receive a character\n");
       char choice = alt_getchar();
       if (choice == 's') {
          alt_putstr("Type a character to send: ");
          char ch = alt_getchar();
-         char parityBit = getParityBit(ch);
-         ch = (ch << 1) + parityBit;
+         //char parityBit = getParityBit(ch);
+         //ch = (ch << 1) + parityBit;
          *data_out = ch;
-         usleep(5); // Half of clk16x per = 3.25 us
+         usleep(105); // Half of clk16x per = 3.25 us
          *load = 1;
-         usleep(5);
+         usleep(105);
          *tx_enable = 1;
-         usleep(5);
+         usleep(105);
          *load = 0;
          while (*char_complete_tx == 0) {
             *tx_enable = 1;
          }
          *tx_enable = 0;
-         usleep(5);
+         usleep(105);
          alt_putstr("Character has been transmitted\n");
       } else if (choice == 'r') {
          if (*data_in == 0xFF) {
             // Receiver buffer is all 1s, no data received
-            alt_putstr("No character has been received");
+            alt_putstr("No character has been received\n");
          } else {
             char received_ch = *data_in;
-            parityBit = received_ch & 0x01;
-            if (getParityBit(received_ch) == parityBit) {
+            //parityBit = received_ch & 0x01;
+            //if (getParityBit(received_ch) == parityBit) {
                alt_putstr("Character has been received: \n");
                alt_putchar(received_ch);
                *LEDR = received_ch;
-            } else {
-               alt_putstr("Error: Transmission error detected, data is garbo");
-            }
+           // } else {
+           //    alt_putstr("Error: Transmission error detected, data is garbo\n");
+           // }
          }
       } else {
-         alt_putstr("Selection was garbo, please enter 's' or 'r'");
+         alt_putstr("Selection was garbo, please enter 's' or 'r'\n");
       }
    }
    return 0;
