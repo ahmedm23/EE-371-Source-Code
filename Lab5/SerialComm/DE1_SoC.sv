@@ -100,8 +100,9 @@ module transmitter_testbench ();
    logic       char_complete_tx;
    logic       load;
    logic       GPIO_01;
-   logic [7:0] data_out
+   logic [7:0] data_out;
    logic       clk16x;
+   logic       reset;
 
    logic sr_clk_Tx;
    bsc bsc_tx (.sr_clk(sr_clk_Tx), .clk16x, .enable(tx_enable));
@@ -119,17 +120,20 @@ module transmitter_testbench ();
    end
 
    initial begin
-                                               @(posedge clk16x);
-      data_out <= 8'b01000011; tx_enable <= 1; @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
-                                               @(posedge sr_clk_Tx);
+                                                          @(posedge clk16x);
+      reset <= 1;                                         @(posedge clk16x);
+      reset <= 0;                                         @(posedge clk16x);
+      data_out <= 8'b01000011; tx_enable <= 1; load <= 1; @(posedge sr_clk_Tx);
+                                               load <= 0; @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+                                                          @(posedge sr_clk_Tx);
+      $stop;
    end
 endmodule

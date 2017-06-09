@@ -7,11 +7,11 @@ module PISO_SR (sr_clk, reset, data_out, data_in, load);
 
    logic [9:0] buff = 10'b11_1111_1111;
 
-   assign data_out = buff[0];
+   assign data_out = buff[9];
 
    always_ff @ (posedge sr_clk or posedge reset)
       if (reset)     buff <= 10'b11_1111_1111;
-      else if (load) buff <= {1'b1, data_in, 1'b0};
+      else if (load) buff <= {1'b0, data_in, 1'b1};
       else           buff <= {buff[8:0], 1'b1};
 endmodule
 
