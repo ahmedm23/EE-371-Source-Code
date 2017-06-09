@@ -2,12 +2,19 @@ module random_generator (clk, reset, data);
   input logic clk, reset;
   output logic [1:0] data;
 
-  always_ff @(posedge clk) begin
-    if(reset)
-      data <= 2'h1f;
-    else
-      data = $urandom_range(4,0);
-  end
+  wire feedback;
+  logic [3:0] out
+  
+  assign feedback = ~(out[3] ^ out[2]);
+
+  always @(posedge clk, posedge reset)
+    begin
+      if (reset)
+        data = 2'bX;
+      else
+        out = {out[2:0],feedback};
+        data = out % 4;
+    end
 endmodule
 
 module random_generator_testbench();
