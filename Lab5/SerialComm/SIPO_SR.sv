@@ -8,7 +8,7 @@ module SIPO_SR (sr_clk, reset, data_out, data_in);
    assign data_out = buff[8:1];
 
    always_ff @ (posedge sr_clk or posedge reset)
-      if (reset) buff <= 10'b11_1111_1111;;
+      if (reset) buff <= 10'b11_1111_1111;
       else       buff <= {data_in, buff[9:1]}; // Shift in least sig bit first
 endmodule
 
