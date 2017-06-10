@@ -5,14 +5,6 @@
 #include <unistd.h>
 #include <stdio.h>
 
-/*#define LEDR             ((char*) 0x00011090)
-#define data_out         ((char*) 0x00011050)
-#define data_in          ((char*) 0x00011010)
-#define tx_enable        ((char*) 0x00011040)
-#define char_complete_tx ((char*) 0x00011030)
-#define load             ((char*) 0x00011020)
-*/
-
 char getParityBit(char);
 
 int main() {
