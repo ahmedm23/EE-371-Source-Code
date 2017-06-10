@@ -1,7 +1,8 @@
 
 module startBitDetect (enable, data, char_complete);
    output logic enable = 1'b0;
-   input  logic data, char_complete;
+   input  logic data;
+   input  logic char_complete = 1'0;
 
    always_ff @ (negedge data or posedge char_complete)
       if (char_complete) enable <= 0;
