@@ -18,7 +18,7 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    // Receiver modules
    logic enable;
    logic char_complete;
-   startBitDetect sbd (.enable, .data(GPIO_0[0]), .char_complete);
+   startBitDetect sbd (.enable, .data(GPIO_0[2]), .char_complete);
 
    logic sr_clk_Rx;
    bsc BSC_Rx (.sr_clk(sr_clk_Rx), .clk16x, .enable); // Generate sr_clk for Rx
@@ -26,7 +26,7 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
    bic BIC_Rx (.sr_clk(sr_clk_Rx), .enable, .char_complete);
 
    SIPO_SR sr_Rx (.sr_clk(sr_clk_Rx), .reset, .data_out(data_in),
-                  .data_in(GPIO_0[0])); 
+                  .data_in(GPIO_0[2])); 
 
    // Transmitter modules
    logic tx_enable;
@@ -37,7 +37,7 @@ module DE1_SoC (CLOCK_50, LEDR, KEY, GPIO_0);
                .char_complete(char_complete_tx));
 
    logic load;
-   PISO_SR sr_Tx (.sr_clk(sr_clk_Tx), .reset, .data_out(GPIO_0[1]),
+   PISO_SR sr_Tx (.sr_clk(sr_clk_Tx), .reset, .data_out(GPIO_0[3]),
                   .data_in(data_out), .load);
 
    
