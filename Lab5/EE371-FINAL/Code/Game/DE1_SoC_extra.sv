@@ -1,8 +1,4 @@
-// Implements a simple Nios II system for the DE-series board.
-// Inputs: SW7−0 are parallel port inputs to the Nios II system
-// CLOCK_50 is the system clock
-// KEY0 is the active-low system reset
-// Outputs: LEDR7−0 are parallel port outputs from the Nios II system
+// Implements prototype to Simon Game (Incomplete)
 module DE1_SoC_extra (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, SW, GPIO_0, 
 					 VGA_R, VGA_G, VGA_B, VGA_BLANK_N, VGA_CLK, VGA_HS, VGA_SYNC_N, VGA_VS);
 	input  CLOCK_50; // 50MHz clock.
@@ -12,6 +8,7 @@ module DE1_SoC_extra (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, S
 	output  [9:0] LEDR;
 	inout	 [35:0] GPIO_0;
 	
+	// outputs for the VGA display
 	output [7:0] VGA_R;
 	output [7:0] VGA_G;
 	output [7:0] VGA_B;
@@ -21,14 +18,9 @@ module DE1_SoC_extra (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, S
 	output VGA_SYNC_N;
 	output VGA_VS;
 
+	// clock divider
 	reg [25:0] tBase;
 	always@(posedge CLOCK_50) tBase <= tBase + 1'b1;
-//	wire [7:0] data_in;
-//	wire [7:0] data_out;
-//	wire trans_en;
-//	wire char_sent;
-//	wire load;
-//	reg char_waiting;
 
    logic [3:0] pressed;
 	
@@ -38,19 +30,17 @@ module DE1_SoC_extra (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, S
       .reset_reset_n(~SW[7]),
       .switches_export(SW[6:0]),
       .leds_export(LEDR[6:0]),
-		//.hex_0_export(HEX5),
-		//.hex_1_export(HEX4),
-		.keys_export(pressed),
-		.data_export(data)); 
-		
+	  .keys_export(pressed),
+	  .data_export(data)); 
+	
+	// Instatiates the UserInput, takes in raw KEY input, outputs cleaned up pulses
+	// (unused but had plans to)
 	UserInput key0 (.clk(CLOCK_50), .keys(~KEY[0]), .pressed(pressed[0]));
 	UserInput key1 (.clk(CLOCK_50), .keys(~KEY[1]), .pressed(pressed[1]));	
 	UserInput key2 (.clk(CLOCK_50), .keys(~KEY[2]), .pressed(pressed[2]));
 	UserInput key3 (.clk(CLOCK_50), .keys(~KEY[3]), .pressed(pressed[3]));
-//	UserInput key0 (.clk(tBase[21]), .keys(~KEY[0]), .pressed(pressed[0]));
-//	UserInput key1 (.clk(tBase[21]), .keys(~KEY[1]), .pressed(pressed[1]));	
-//	UserInput key2 (.clk(tBase[21]), .keys(~KEY[2]), .pressed(pressed[2]));
-//	UserInput key3 (.clk(tBase[21]), .keys(~KEY[3]), .pressed(pressed[3]));
+
+	// turns off unused displays
 	assign HEX0 = 7'b1111111;
 	assign HEX1 = 7'b1111111;
 	assign HEX2 = 7'b1111111;
@@ -62,38 +52,8 @@ module DE1_SoC_extra (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, S
 	logic [2:0] data;
 	logic [1:0] rando;
 	logic did_die;
-	//assign data = SW[1:0];
-//	assign data[0] = pressed[0];
-//	assign data[1] = pressed[1];
-//	assign data[2] = pressed[2];
-//	assign data[3] = pressed[3];
 	
-//	always_comb
-//		case(KEY)
-//			~KEY[0]: data = 3'b001;
-//			~KEY[1]: data = 3'b010;
-//			~KEY[2]: data = 3'b011;
-//			~KEY[3]: data = 3'b100;
-//			default: data = 3'b000;
-//		endcase
-
-//	assign data[3'b001] = pressed[0];
-//   assign data[3'b010] = pressed[1];
-//	assign data[3'b011] = pressed[2];
-//	assign data[3'b100] = pressed[3];
-	
-//	always@(*)
-//	if (pressed[0] == 1)
-//		data = 3'b001;
-//	else if (pressed[1] == 1)
-//		data = 3'b010;
-//	else if (pressed[2] == 1)
-//		data = 3'b011;
-//	else if (pressed[3] == 1)
-//		data = 3'b100;
-//	else
-//		data = 3'b000;
-
+	// assigns each key to a data bit number for the color module
 	always@(*)
 	if (KEY[0] == 0)
 		data = 3'b001;
@@ -105,40 +65,18 @@ module DE1_SoC_extra (CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR, S
 		data = 3'b100;
 	else
 		data = 3'b000;
-//	
-	//assign did_die = ~pressed[data];
+    
+	// generates a random number and assigns it to LEDR 9, 8, and 7
 	random_generator rg (.clk(tBase[21]), .reset(SW[7]), .data(rando));
 	assign LEDR[9:7] = rando;
 
-
-	//lives_to_hex l (.clk(CLOCK_50), .reset(SW[7]), .did_die, .hex_count(HEX4), .hex_sign(HEX5));
+	// instatiates the lives to hex counter, which displays a sign and a number on HEX5 and HEX4
 	lives_to_hex l (.clk(CLOCK_50), .reset(SW[7]), .did_die(pressed[0]), .hex_count(HEX4), .hex_sign(HEX5));
 
+	// takes in a data bit and outputs red, green, blue, or yellow
 	color choose(.data, .r, .g, .b);
 	
-	
-//	logic [32:0] count;
-//	logic state;
-//	
-//	always_ff @ (posedge CLOCK_50) begin
-//		count <= count + 1;
-//	end
-//	
-//	always_ff @ (posedge CLOCK_50) begin
-//		if(count[24]) begin
-//			if (x > 300 && x < 500 && y > 200 && y < 400) begin 
-//				r <= 8'd0;
-//				g <= 8'd0;
-//				b <= 8'd255;
-//			end
-//		end	
-//		else begin
-//			r <= 8'd0;
-//			g <= 8'd0;
-//			b <= 8'd0;
-//		end	
-//	end
-//	
+	// drives the VGA display
 	video_driver vid(.CLOCK_50, .reset(SW[7]), .x, .y, .r, .g, .b, .VGA_R, .VGA_G, .VGA_B, .VGA_BLANK_N, .VGA_CLK, .VGA_HS, .VGA_SYNC_N, .VGA_VS);
 
 		

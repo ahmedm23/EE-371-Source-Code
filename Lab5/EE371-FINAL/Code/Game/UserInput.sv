@@ -1,18 +1,19 @@
+// Avoids metastability and outputs a pulse from a
+// raw key press
 module UserInput (clk, keys, pressed);
 	input logic clk;
 	input logic keys;
 	output logic pressed;
-	
-	// You want to design a simple FSM that
-	//	detects the moment the button is pressed – 
-	//	its output is TRUE for only 1 cycle for every
-	//	button press. This will handle all user input.
+
 	logic key1, key_d, key_clean;
+   // creates a pulse
    assign pressed = key_clean & !key_d;
 	
 	always @ (posedge clk) begin
+	    // avoids metastability
 		key1 <= keys;
 		key_clean <= key1;
+		// adds a delay
 		key_d <= key_clean;
 	end
 	

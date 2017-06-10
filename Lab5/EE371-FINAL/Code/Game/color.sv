@@ -1,7 +1,11 @@
+// This module takes in a 3 bit data and outputs the desired color
+// values to be displayed on the Video Driver
+
 module color (data, r, g, b);
 	input logic [2:0] data;
 	output logic [7:0] r, g, b;
 	
+	// names parameters for readability
 	parameter
 	empty  = 3'b000,
 	red    = 3'b001, 

@@ -1,3 +1,4 @@
+// generates a random number sequence from a 4 bit LSFR
 module random_generator (clk, reset, data);
   input logic clk, reset;
   output logic [1:0] data;

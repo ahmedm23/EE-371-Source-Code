@@ -1,3 +1,4 @@
+// displays sign and number on HEX displays
 module lives_to_hex(clk, reset, did_die, hex_count, hex_sign);
    	input  clk, reset, did_die;
    	output logic [6:0] hex_count, hex_sign;
