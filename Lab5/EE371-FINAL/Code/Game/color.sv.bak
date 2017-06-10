@@ -1,6 +1,0 @@
-module color (data, r, g, b);
-	input logic [2:0] data;
-	
-	
-
-endmodule 
